@@ -25118,6 +25118,11 @@ type: "Local Legend"
                 map.fitBounds(group.getBounds().pad(0.1));
             }
         }
+
+        // Generate Google Maps directions URL
+        function getDirectionsUrl(coordinates) {
+            return `https://www.google.com/maps/dir/?api=1&destination=${coordinates[0]},${coordinates[1]}`;
+        }
  
         // Display locations on map
         function displayLocationsOnMap(locations) {
@@ -25157,6 +25162,17 @@ type: "Local Legend"
                             <div style="margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px;">
                                 ${location.features.map(feature => `<span style="background: rgba(255, 107, 53, 0.2); color: #ff6b35; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; border: 1px solid rgba(255, 107, 53, 0.3);">${feature}</span>`).join('')}
                             </div>
+                        </div>
+                        <div style="margin: 12px 0; text-align: center;">
+                            <a href="${getDirectionsUrl(location.coordinates)}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 107, 53, 0.2); color: #ff8c42; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.85em; border: 1px solid #ff6b35; transition: all 0.3s ease;"
+                               onmouseover="this.style.background='rgba(255, 107, 53, 0.35)'; this.style.boxShadow='0 4px 15px rgba(255, 107, 53, 0.3)';"
+                               onmouseout="this.style.background='rgba(255, 107, 53, 0.2)'; this.style.boxShadow='none';">
+                                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+                                Directions
+                            </a>
                         </div>
                         ${location.imageSource ? `<div style="text-align: center;"><span style="background: rgba(255, 107, 53, 0.2); color: #ff6b35; padding: 2px 6px; border-radius: 8px; font-size: 0.7em; border: 1px solid rgba(255, 107, 53, 0.3);">📸 ${location.imageSource}</span></div>` : ''}
                     </div>
@@ -25198,6 +25214,13 @@ type: "Local Legend"
                             ${location.features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
                         </div>
                     </div>
+                    <a href="${getDirectionsUrl(location.coordinates)}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="directions-btn-compact">
+                        <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+                        Directions
+                    </a>
                     ${location.imageSource ? `<div class="image-source-badge">Source: ${location.imageSource}</div>` : ''}
                 </div>
             `).join('');
