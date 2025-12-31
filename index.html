@@ -600,14 +600,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     
     <script>
-        // Initialize the map - Center on US initially
-        let map = L.map('map').setView([39.8283, -98.5795], 4);
+        // Initialize the map - Center on US initially with bounds constraints
+        let map = L.map('map', {
+            maxBounds: [[-90, -180], [90, 180]],
+            maxBoundsViscosity: 1.0,
+            minZoom: 2
+        }).setView([39.8283, -98.5795], 4);
 
         // Primary tile layer - CartoDB Dark Matter
         const primaryTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
-            maxZoom: 19
+            maxZoom: 19,
+            noWrap: true
         });
 
         // Fallback tile layer - OpenStreetMap
