@@ -25024,7 +25024,7 @@ type: "Local Legend"
     type: "Historic Mansion"
   }
 ];
-let currentDisplayedLocations = [];
+	let currentDisplayedLocations = [];
  
         // Initialize the application
         function initializeApp() {
@@ -25177,7 +25177,7 @@ let currentDisplayedLocations = [];
  
                 marker.bindPopup(popupContent, {
                     maxWidth: 320,
-                    maxHeight: 400,
+                    maxHeight: 600,
                     className: 'haunted-popup'
                 });
 
@@ -25192,7 +25192,7 @@ let currentDisplayedLocations = [];
             const listContainer = document.getElementById('locationsList');
             
             listContainer.innerHTML = locations.map(location => `
-                <div class="location-card activity-${location.activityLevel}" data-id="${location.id}">
+                <div class="location-card activity-${location.activityLevel}" data-id="${location.id}" style="display: flex; flex-direction: column;">
                     ${location.imageUrl ? `
                         <div class="location-image">
                             <img src="${location.imageUrl}" 
@@ -25211,6 +25211,7 @@ let currentDisplayedLocations = [];
                             ${location.features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
                         </div>
                     </div>
+                    <div style="flex-grow: 1;"></div>
                     <div style="text-align: center; margin-top: 15px;">
                         <a href="${getDirectionsUrl(location.coordinates)}" 
                            target="_blank" 
