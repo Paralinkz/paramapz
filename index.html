@@ -25040,15 +25040,141 @@ type: "Local Legend"
   }
 ];
 let currentDisplayedLocations = [];
+
+        // ==========================================
+        // BOOKMARK FUNCTIONALITY - LOCAL STORAGE
+        // ==========================================
+        
+        // Initialize bookmarks from local storage
+        let bookmarkedLocations = JSON.parse(localStorage.getItem('paramapz_bookmarks')) || [];
+
+        // Save bookmarks to local storage
+        function saveBookmarksToStorage() {
+            localStorage.setItem('paramapz_bookmarks', JSON.stringify(bookmarkedLocations));
+        }
+
+        // Check if a location is bookmarked
+        function isBookmarked(locationId) {
+            return bookmarkedLocations.includes(locationId);
+        }
+
+        // Toggle bookmark status
+        function toggleBookmark(locationId, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            if (isBookmarked(locationId)) {
+                bookmarkedLocations = bookmarkedLocations.filter(id => id !== locationId);
+            } else {
+                bookmarkedLocations.push(locationId);
+            }
+            
+            saveBookmarksToStorage();
+            updateBookmarkUI(locationId);
+            updateBookmarkCount();
+        }
+
+        // Update bookmark button UI for a specific location
+        function updateBookmarkUI(locationId) {
+            const buttons = document.querySelectorAll(`[data-bookmark-id="${locationId}"]`);
+            buttons.forEach(btn => {
+                if (isBookmarked(locationId)) {
+                    btn.classList.add('bookmarked');
+                    btn.innerHTML = getBookmarkIcon(true) + ' Saved';
+                    btn.title = 'Remove from Saved';
+                } else {
+                    btn.classList.remove('bookmarked');
+                    btn.innerHTML = getBookmarkIcon(false) + ' Save';
+                    btn.title = 'Save Location';
+                }
+            });
+        }
+
+        // Get bookmark icon SVG (heart)
+        function getBookmarkIcon(filled) {
+            if (filled) {
+                return `<svg viewBox="0 0 24 24" width="14" height="14" style="width: 14px !important; height: 14px !important; min-width: 14px; max-width: 14px; fill: currentColor;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+            } else {
+                return `<svg viewBox="0 0 24 24" width="14" height="14" style="width: 14px !important; height: 14px !important; min-width: 14px; max-width: 14px; fill: currentColor;"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></svg>`;
+            }
+        }
+
+        // Update bookmark count in statistics
+        function updateBookmarkCount() {
+            const countElement = document.getElementById('bookmarkCount');
+            if (countElement) {
+                countElement.textContent = bookmarkedLocations.length;
+            }
+        }
+
+        // Filter to show only bookmarked locations
+        function showBookmarkedOnly() {
+            const bookmarkFilter = document.getElementById('bookmarkFilter');
+            if (bookmarkFilter && bookmarkFilter.checked) {
+                const bookmarkedLocs = hauntedLocations.filter(loc => isBookmarked(loc.id));
+                displayLocationsOnMap(bookmarkedLocs);
+                displayLocationsList(bookmarkedLocs);
+                updateDisplayedCount(bookmarkedLocs.length);
+                if (bookmarkedLocs.length > 0) {
+                    centerMapOnLocations(bookmarkedLocs);
+                }
+            } else {
+                filterAndDisplayLocations();
+            }
+        }
+
+        // Generate bookmark button HTML for popups (inline styles)
+        function getPopupBookmarkButton(locationId) {
+            const bookmarked = isBookmarked(locationId);
+            return `
+                <button 
+                    onclick="toggleBookmark('${locationId}', event)" 
+                    data-bookmark-id="${locationId}"
+                    title="${bookmarked ? 'Remove from Saved' : 'Save Location'}"
+                    style="display: inline-flex; align-items: center; gap: 4px; background: ${bookmarked ? 'rgba(255, 107, 53, 0.4)' : 'rgba(255, 107, 53, 0.2)'}; color: #ff8c42; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.75em; border: 1px solid #ff6b35; cursor: pointer;"
+                    class="${bookmarked ? 'bookmarked' : ''}"
+                >
+                    ${getBookmarkIcon(bookmarked)} ${bookmarked ? 'Saved' : 'Save'}
+                </button>
+            `;
+        }
+
+        // Generate bookmark button HTML for cards (inline styles)
+        function getCardBookmarkButton(locationId) {
+            const bookmarked = isBookmarked(locationId);
+            return `
+                <button 
+                    onclick="toggleBookmark('${locationId}', event)" 
+                    data-bookmark-id="${locationId}"
+                    title="${bookmarked ? 'Remove from Saved' : 'Save Location'}"
+                    style="display: inline-flex; align-items: center; gap: 4px; background: ${bookmarked ? 'rgba(255, 107, 53, 0.4)' : 'rgba(255, 107, 53, 0.2)'}; color: #ff8c42; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.75em; border: 1px solid #ff6b35; cursor: pointer;"
+                    class="${bookmarked ? 'bookmarked' : ''}"
+                >
+                    ${getBookmarkIcon(bookmarked)} ${bookmarked ? 'Saved' : 'Save'}
+                </button>
+            `;
+        }
+
+        // ==========================================
+        // MAIN APPLICATION FUNCTIONS
+        // ==========================================
  
         // Initialize the application
         function initializeApp() {
             updateStatistics();
+            updateBookmarkCount();
             displayAllLocations();
         }
  
         // Filter and display locations based on current selections
         function filterAndDisplayLocations() {
+            // Uncheck bookmark filter when applying other filters
+            const bookmarkFilter = document.getElementById('bookmarkFilter');
+            if (bookmarkFilter) {
+                bookmarkFilter.checked = false;
+            }
+
             const stateFilter = document.getElementById('stateFilter').value;
             const typeFilter = document.getElementById('locationType').value;
             const activityFilter = document.getElementById('activityLevel').value;
@@ -25178,7 +25304,7 @@ let currentDisplayedLocations = [];
                                 ${location.features.map(feature => `<span style="background: rgba(255, 107, 53, 0.2); color: #ff6b35; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; border: 1px solid rgba(255, 107, 53, 0.3);">${feature}</span>`).join('')}
                             </div>
                         </div>
-                        <div style="text-align: center; margin-top: 15px;">
+                        <div style="text-align: center; margin-top: 15px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                             <a href="${getDirectionsUrl(location.coordinates)}" 
                                target="_blank" 
                                rel="noopener noreferrer" 
@@ -25186,6 +25312,7 @@ let currentDisplayedLocations = [];
                                 <svg viewBox="0 0 24 24" width="12" height="12" style="width: 12px !important; height: 12px !important; min-width: 12px; max-width: 12px; fill: currentColor;"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
                                 Directions
                             </a>
+                            ${getPopupBookmarkButton(location.id)}
                         </div>
                     </div>
                 `;
@@ -25228,7 +25355,7 @@ let currentDisplayedLocations = [];
                     </div>
                     ${location.imageSource ? `<div class="image-source-badge">Source: ${location.imageSource}</div>` : ''}
                     <div style="flex: 1;"></div>
-                    <div style="text-align: center; padding-top: 15px; margin-top: auto;">
+                    <div style="text-align: center; padding-top: 15px; margin-top: auto; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                         <a href="${getDirectionsUrl(location.coordinates)}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
@@ -25236,6 +25363,7 @@ let currentDisplayedLocations = [];
                             <svg viewBox="0 0 24 24" width="12" height="12" style="width: 12px !important; height: 12px !important; min-width: 12px; max-width: 12px; fill: currentColor;"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
                             Directions
                         </a>
+                        ${getCardBookmarkButton(location.id)}
                     </div>
                 </div>
             `).join('');
