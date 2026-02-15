@@ -706,12 +706,12 @@ async function loadLocations() {
     try {
         document.getElementById('totalLocations').textContent = 'Loading...';
         
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxhI0ehH43dAegX3tYKSN9A92RshNWKLHkaIBA0dUFoJ3TCfXE0DsNQlojoTQNh5QdbHg/exec');
+        const response = await fetch('https://script.google.com/macros/s/AKfycby1zmlK_yXACcl1ddh_lia1DH8nSkCKXtbuuaonQFombQqNR7pyNuUvYy7lyWIj6c9WNw/exec');
+        
         hauntedLocations = await response.json();
         
-        console.log(`Loaded ${hauntedLocations.length} locations from Google Sheets`);
+        console.log(`Loaded ${hauntedLocations.length} locations`);
         
-        // Now initialize the app with the loaded data
         initializeApp();
         
     } catch (error) {
