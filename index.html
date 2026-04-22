@@ -204,19 +204,12 @@
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
     }
-
-    .content-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.85fr);
-        gap: 24px;
-        align-items: start;
-    }
  
     .map-container {
         background: rgba(42, 42, 42, 0.9);
         border-radius: 15px;
         padding: 20px;
-        margin-bottom: 0;
+        margin-bottom: 30px;
         position: relative;
         overflow: hidden;
     }
@@ -235,9 +228,7 @@
         background: rgba(42, 42, 42, 0.9);
         border-radius: 15px;
         padding: 20px;
-        min-height: 700px;
-        position: sticky;
-        top: 20px;
+        margin-top: 0;
     }
 
     .results-panel-header {
@@ -332,20 +323,17 @@
  
     .locations-list {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 20px;
         margin-top: 0;
         align-items: stretch;
-        max-height: calc(100vh - 180px);
-        overflow-y: auto;
-        padding-right: 4px;
     }
  
     .location-card {
         background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
         border: 1px solid #444;
         border-radius: 15px;
-        padding: 20px 20px 20px 30px;
+        padding: 36px 20px 20px 20px;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -356,32 +344,20 @@
     }
  
     .location-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #ff6b35, #ff8c42, #ff6b35);
-    }
-
-    .location-card::after {
         content: attr(data-activity-label);
         position: absolute;
         top: 0;
         left: 0;
-        bottom: 0;
-        width: 18px;
+        right: 0;
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
-        writing-mode: vertical-rl;
-        transform: rotate(180deg);
-        font-size: 10px;
-        font-weight: bold;
-        letter-spacing: 1px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
         color: #111;
-        text-transform: uppercase;
+        text-transform: none;
         text-align: center;
     }
  
@@ -398,26 +374,26 @@
     }
 
     .location-card.activity-high {
-        border-left: 14px solid #ff4444;
+        border-top: 14px solid #ff4444;
     }
 
-    .location-card.activity-high::after {
+    .location-card.activity-high::before {
         background: #ff4444;
     }
 
     .location-card.activity-moderate {
-        border-left: 14px solid #ffaa44;
+        border-top: 14px solid #ffaa44;
     }
 
-    .location-card.activity-moderate::after {
+    .location-card.activity-moderate::before {
         background: #ffaa44;
     }
 
     .location-card.activity-low {
-        border-left: 14px solid #44ff44;
+        border-top: 14px solid #44ff44;
     }
 
-    .location-card.activity-low::after {
+    .location-card.activity-low::before {
         background: #44ff44;
     }
 
@@ -500,6 +476,7 @@
         border: 1px dashed #555;
         border-radius: 12px;
         background: rgba(255,255,255,0.02);
+        grid-column: 1 / -1;
     }
  
     .coordinates {
@@ -567,51 +544,7 @@
     .activity-low-legend {
         background: #44ff44;
     }
-
-    #goToTopBtn {
-        position: fixed;
-        left: 24px;
-        top: 80%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        width: 54px;
-        height: 54px;
-        border: none;
-        border-radius: 999px;
-        background: linear-gradient(135deg, #ff6b35, #e55a2e);
-        color: #fff;
-        font-size: 22px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 10px 25px rgba(255, 107, 53, 0.35);
-        transition: opacity 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease, left 0.12s ease, top 0.12s ease;
-    }
-
-    #goToTopBtn:hover {
-        transform: translate(-50%, -50%) scale(1.08);
-        box-shadow: 0 14px 32px rgba(255, 107, 53, 0.45);
-    }
  
-    @media (max-width: 1024px) {
-        .content-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .results-panel {
-            position: relative;
-            top: 0;
-            min-height: auto;
-        }
-
-        .locations-list {
-            max-height: none;
-            overflow-y: visible;
-        }
-    }
-
     @media (max-width: 768px) {
         .map-controls {
             flex-direction: column;
@@ -646,10 +579,13 @@
             align-items: flex-start;
         }
 
-        #goToTopBtn {
-            width: 48px;
-            height: 48px;
-            font-size: 20px;
+        .locations-list {
+            grid-template-columns: 1fr;
+        }
+
+        .location-card::before {
+            font-size: 12px;
+            height: 30px;
         }
     }
     </style>
@@ -819,24 +755,20 @@
             </button>
         </div>
 
-        <div class="content-layout">
-            <div class="map-container">
-                <div id="map"></div>
-            </div>
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
          
-            <div class="results-panel">
-                <div class="results-panel-header">
-                    <h3>Search Results</h3>
-                    <div class="results-subtext" id="resultsSummary">Showing 0 locations</div>
-                </div>
-                <div id="locationsList" class="locations-list">
-                    <!-- Generated locations will appear here -->
-                </div>
+        <div class="results-panel">
+            <div class="results-panel-header">
+                <h3>Search Results</h3>
+                <div class="results-subtext" id="resultsSummary">Showing 0 locations</div>
+            </div>
+            <div id="locationsList" class="locations-list">
+                <!-- Generated locations will appear here -->
             </div>
         </div>
     </div>
-
-    <button id="goToTopBtn" title="Go to top of page" aria-label="Go to top of page">↑</button>
  
     <!-- Leaflet JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -881,12 +813,10 @@
             console.log('Tile loading error:', error);
             tileErrorCount++;
             
-            // If we get multiple tile errors, switch to fallback
             if (tileErrorCount > 3) {
                 console.log('Switching to fallback tiles...');
                 map.removeLayer(currentTileLayer);
                 
-                // Try secondary tiles first, then fallback to OSM
                 if (currentTileLayer === primaryTiles) {
                     currentTileLayer = secondaryTiles;
                     currentTileLayer.addTo(map);
@@ -899,7 +829,6 @@
             }
         });
 
-        // Force refresh tiles if still gray after 5 seconds
         setTimeout(() => {
             if (tileErrorCount > 0) {
                 console.log('Force switching to OpenStreetMap tiles...');
@@ -909,12 +838,10 @@
             }
         }, 5000);
  
-        // Store markers for clearing
         let markersGroup = L.layerGroup().addTo(map);
         let markerIndex = {};
         let selectedLocationId = null;
  
-        // Haunted locations database
         let hauntedLocations = [];
         let currentDisplayedLocations = [];
 
@@ -937,10 +864,6 @@
             }
         }
 		
-        // ==========================================
-        // BOOKMARK FUNCTIONALITY - LOCAL STORAGE
-        // ==========================================
-        
         let bookmarkedLocations = JSON.parse(localStorage.getItem('paramapz_bookmarks')) || [];
 
         function saveBookmarksToStorage() {
@@ -1043,10 +966,6 @@
             `;
         }
 
-        // ==========================================
-        // MAIN APPLICATION FUNCTIONS
-        // ==========================================
- 
         function initializeApp() {
             updateStatistics();
             updateBookmarkCount();
@@ -1182,9 +1101,9 @@
         }
 
         function getActivityLabel(activityLevel) {
-            if (activityLevel === 'high') return 'HIGH';
-            if (activityLevel === 'moderate') return 'MOD';
-            return 'LOW';
+            if (activityLevel === 'high') return 'High Activity';
+            if (activityLevel === 'moderate') return 'Moderate Activity';
+            return 'Low Activity';
         }
 
         function setSelectedLocation(locationId, openPopup = true, scrollCardIntoView = true) {
@@ -1244,7 +1163,7 @@
                         <p style="margin-bottom: 5px;"><strong>Location:</strong> ${escapeHtml(location.city)}, ${escapeHtml(location.state)}</p>
                         <p style="margin-bottom: 5px;"><strong>Type:</strong> ${escapeHtml(location.type)}</p>
                         <p style="margin-bottom: 5px;"><strong>Established:</strong> ${escapeHtml(String(location.yearEstablished || 'Unknown'))}</p>
-                        <p style="margin-bottom: 10px;"><strong>Activity Level:</strong> <span style="color: ${location.activityLevel === 'high' ? '#ff4444' : location.activityLevel === 'moderate' ? '#ffaa44' : '#44ff44'};">${escapeHtml(location.activityLevel.toUpperCase())}</span></p>
+                        <p style="margin-bottom: 10px;"><strong>Activity Level:</strong> <span style="color: ${location.activityLevel === 'high' ? '#ff4444' : location.activityLevel === 'moderate' ? '#ffaa44' : '#44ff44'};">${escapeHtml(getActivityLabel(location.activityLevel))}</span></p>
                         <div style="margin-bottom: 10px;">
                             <strong>Story:</strong>
                             <p style="margin-top: 5px; line-height: 1.4; font-size: 0.9em;">${escapeHtml(location.story)}</p>
@@ -1299,7 +1218,7 @@
             }
             
             listContainer.innerHTML = locations.map(location => `
-                <div class="location-card activity-${escapeAttribute(location.activityLevel)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" data-activity-label="${getActivityLabel(location.activityLevel)}" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="location-card activity-${escapeAttribute(location.activityLevel)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" data-activity-label="${escapeAttribute(getActivityLabel(location.activityLevel))}" style="display: flex; flex-direction: column; height: 100%;">
                     ${location.imageUrl ? `
                         <div class="location-image">
                             <img src="${escapeAttribute(location.imageUrl)}" 
@@ -1375,54 +1294,15 @@
             return escapeHtml(value);
         }
 
-        // ==========================================
-        // GO TO TOP BUTTON THAT FOLLOWS CURSOR
-        // ==========================================
-        const goToTopBtn = document.getElementById('goToTopBtn');
-        let cursorX = 24;
-        let cursorY = window.innerHeight * 0.8;
-
-        function clamp(num, min, max) {
-            return Math.min(Math.max(num, min), max);
-        }
-
-        function updateGoToTopVisibility() {
-            if (window.scrollY > 250) {
-                goToTopBtn.style.display = 'flex';
-            } else {
-                goToTopBtn.style.display = 'none';
-            }
-        }
-
-        document.addEventListener('mousemove', (e) => {
-            cursorX = clamp(e.clientX + 26, 35, window.innerWidth - 35);
-            cursorY = clamp(e.clientY - 26, 35, window.innerHeight - 35);
-
-            if (window.scrollY > 250) {
-                goToTopBtn.style.left = `${cursorX}px`;
-                goToTopBtn.style.top = `${cursorY}px`;
-            }
-        });
-
-        window.addEventListener('scroll', updateGoToTopVisibility);
-
-        goToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             loadLocations();
-            updateGoToTopVisibility();
         });
  
-        // Add event listeners for filtering
         document.getElementById('stateFilter').addEventListener('change', filterAndDisplayLocations);
         document.getElementById('cityFilter').addEventListener('change', filterAndDisplayLocations);
         document.getElementById('locationType').addEventListener('change', filterAndDisplayLocations);
         document.getElementById('activityLevel').addEventListener('change', filterAndDisplayLocations);
         document.getElementById('sortOrder').addEventListener('change', filterAndDisplayLocations);
-
         document.getElementById('searchInput').addEventListener('input', filterAndDisplayLocations);
     </script>
 </body>
