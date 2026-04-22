@@ -906,6 +906,19 @@
             if (countElement) countElement.textContent = bookmarkedLocations.length;
         }
 
+        function normalizeActivityLevel(activityLevel) {
+            const normalized = String(activityLevel || '')
+                .trim()
+                .toLowerCase()
+                .replace(/\s+activity$/, '');
+
+            if (normalized === 'high' || normalized === 'moderate' || normalized === 'low') {
+                return normalized;
+            }
+
+            return 'low';
+        }
+
         function showBookmarkedOnly() {
             const bookmarkFilter = document.getElementById('bookmarkFilter');
             if (bookmarkFilter && bookmarkFilter.checked) {
@@ -1000,10 +1013,12 @@
             const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
 
             let filteredLocations = baseLocations.filter(location => {
+                const normalizedActivity = normalizeActivityLevel(location.activityLevel);
+
                 const stateMatch = !stateFilter || location.state === stateFilter;
                 const cityMatch = !cityFilter || location.city === cityFilter;
                 const typeMatch = !typeFilter || location.type === typeFilter;
-                const activityMatch = !activityFilter || location.activityLevel === activityFilter;
+                const activityMatch = !activityFilter || normalizedActivity === activityFilter;
 
                 const haystack = [
                     location.name,
@@ -1012,7 +1027,7 @@
                     location.type,
                     location.story,
                     Array.isArray(location.features) ? location.features.join(' ') : '',
-                    location.activityLevel
+                    normalizedActivity
                 ].join(' ').toLowerCase();
 
                 const searchMatch = !searchQuery || haystack.includes(searchQuery);
@@ -1035,8 +1050,8 @@
                 case 'activity':
                     const activityOrder = { 'high': 3, 'moderate': 2, 'low': 1 };
                     return sortedLocations.sort((a, b) => {
-                        const aOrder = activityOrder[a.activityLevel];
-                        const bOrder = activityOrder[b.activityLevel];
+                        const aOrder = activityOrder[normalizeActivityLevel(a.activityLevel)];
+                        const bOrder = activityOrder[normalizeActivityLevel(b.activityLevel)];
                         return bOrder - aOrder;
                     });
                 case 'year':
@@ -1076,8 +1091,9 @@
         }
 
         function getActivityLabel(activityLevel) {
-            if (activityLevel === 'high') return 'High Activity';
-            if (activityLevel === 'moderate') return 'Moderate Activity';
+            const normalized = normalizeActivityLevel(activityLevel);
+            if (normalized === 'high') return 'High Activity';
+            if (normalized === 'moderate') return 'Moderate Activity';
             return 'Low Activity';
         }
 
@@ -1123,6 +1139,8 @@
 
                 marker.locationId = location.id;
                 markerIndex[location.id] = marker;
+
+                const normalizedActivity = normalizeActivityLevel(location.activityLevel);
  
                 const popupContent = `
                     <div style="max-width: 300px;">
@@ -1136,7 +1154,7 @@
                         <p style="margin-bottom: 5px;"><strong>Location:</strong> ${escapeHtml(location.city)}, ${escapeHtml(location.state)}</p>
                         <p style="margin-bottom: 5px;"><strong>Type:</strong> ${escapeHtml(location.type)}</p>
                         <p style="margin-bottom: 5px;"><strong>Established:</strong> ${escapeHtml(String(location.yearEstablished || 'Unknown'))}</p>
-                        <p style="margin-bottom: 10px;"><strong>Activity Level:</strong> <span style="color: ${location.activityLevel === 'high' ? '#ff4444' : location.activityLevel === 'moderate' ? '#ffaa44' : '#44ff44'};">${escapeHtml(getActivityLabel(location.activityLevel))}</span></p>
+                        <p style="margin-bottom: 10px;"><strong>Activity Level:</strong> <span style="color: ${normalizedActivity === 'high' ? '#ff4444' : normalizedActivity === 'moderate' ? '#ffaa44' : '#44ff44'};">${escapeHtml(getActivityLabel(normalizedActivity))}</span></p>
                         <div style="margin-bottom: 10px;">
                             <strong>Story:</strong>
                             <p style="margin-top: 5px; line-height: 1.4; font-size: 0.9em;">${escapeHtml(location.story)}</p>
@@ -1190,41 +1208,45 @@
                 return;
             }
             
-            listContainer.innerHTML = locations.map(location => `
-                <div class="location-card activity-${escapeAttribute(location.activityLevel)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" data-activity-label="${escapeAttribute(getActivityLabel(location.activityLevel))}" style="display: flex; flex-direction: column; height: 100%;">
-                    ${location.imageUrl ? `
-                        <div class="location-image">
-                            <img src="${escapeAttribute(location.imageUrl)}" 
-                                 alt="${escapeAttribute(location.name)}" 
-                                 onerror="this.style.display='none'"
-                                 loading="lazy">
+            listContainer.innerHTML = locations.map(location => {
+                const normalizedActivity = normalizeActivityLevel(location.activityLevel);
+
+                return `
+                    <div class="location-card activity-${escapeAttribute(normalizedActivity)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" data-activity-label="${escapeAttribute(getActivityLabel(normalizedActivity))}" style="display: flex; flex-direction: column; height: 100%;">
+                        ${location.imageUrl ? `
+                            <div class="location-image">
+                                <img src="${escapeAttribute(location.imageUrl)}" 
+                                     alt="${escapeAttribute(location.name)}" 
+                                     onerror="this.style.display='none'"
+                                     loading="lazy">
+                            </div>
+                        ` : ''}
+                        <div class="location-title">${escapeHtml(location.name)}</div>
+                        <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
+                        <div class="location-type">${escapeHtml(location.type)}</div>
+                        <div class="location-story">${escapeHtml(location.story)}</div>
+                        <div class="location-features">
+                            <h4>Reported Phenomena:</h4>
+                            <div class="features-list">
+                                ${(location.features || []).map(feature => `<span class="feature-tag">${escapeHtml(feature)}</span>`).join('')}
+                            </div>
                         </div>
-                    ` : ''}
-                    <div class="location-title">${escapeHtml(location.name)}</div>
-                    <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
-                    <div class="location-type">${escapeHtml(location.type)}</div>
-                    <div class="location-story">${escapeHtml(location.story)}</div>
-                    <div class="location-features">
-                        <h4>Reported Phenomena:</h4>
-                        <div class="features-list">
-                            ${(location.features || []).map(feature => `<span class="feature-tag">${escapeHtml(feature)}</span>`).join('')}
+                        ${location.imageSource ? `<div class="image-source-badge">Source: ${escapeHtml(location.imageSource)}</div>` : ''}
+                        <div style="flex: 1;"></div>
+                        <div style="text-align: center; padding-top: 15px; margin-top: auto; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                            <a href="${getDirectionsUrl(location.coordinates)}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               onclick="event.stopPropagation()"
+                               style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 53, 0.2); color: #ff8c42; padding: 4px 10px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 0.75em; border: 1px solid #ff6b35;">
+                                <svg viewBox="0 0 24 24" width="12" height="12" style="width: 12px !important; height: 12px !important; min-width: 12px; max-width: 12px; fill: currentColor;"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+                                Directions
+                            </a>
+                            ${getCardBookmarkButton(location.id)}
                         </div>
                     </div>
-                    ${location.imageSource ? `<div class="image-source-badge">Source: ${escapeHtml(location.imageSource)}</div>` : ''}
-                    <div style="flex: 1;"></div>
-                    <div style="text-align: center; padding-top: 15px; margin-top: auto; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                        <a href="${getDirectionsUrl(location.coordinates)}" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           onclick="event.stopPropagation()"
-                           style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 53, 0.2); color: #ff8c42; padding: 4px 10px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 0.75em; border: 1px solid #ff6b35;">
-                            <svg viewBox="0 0 24 24" width="12" height="12" style="width: 12px !important; height: 12px !important; min-width: 12px; max-width: 12px; fill: currentColor;"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-                            Directions
-                        </a>
-                        ${getCardBookmarkButton(location.id)}
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             document.querySelectorAll('.location-card').forEach(card => {
                 card.addEventListener('click', () => {
@@ -1237,7 +1259,7 @@
  
         function updateStatistics() {
             const totalCount = hauntedLocations.length;
-            const highActivityCount = hauntedLocations.filter(loc => loc.activityLevel === 'high').length;
+            const highActivityCount = hauntedLocations.filter(loc => normalizeActivityLevel(loc.activityLevel) === 'high').length;
             document.getElementById('totalLocations').textContent = totalCount;
             document.getElementById('highActivity').textContent = highActivityCount;
         }
