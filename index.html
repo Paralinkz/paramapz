@@ -713,24 +713,25 @@
         .locations-list {
             grid-template-columns: 1fr;
         }
-	/* ===== CUSTOM SCROLLBAR (ParaMapz Dark Theme) ===== */
-
-	/* Width */
-	::-webkit-scrollbar {
-    	width: 8px;
+	/* Scrollbar ONLY for results list */
+.locations-list::-webkit-scrollbar {
+    width: 8px;
 }
 
-	/* Track (background) */
-	::-webkit-scrollbar-track {
-    	background: #1a1a1a;
-    	border-radius: 10px;
+.locations-list::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 10px;
 }
 
-	/* Scroll thumb */
-	::-webkit-scrollbar-thumb {
-    	background: linear-gradient(180deg, #ff6b35, #cc4a1a);
-    	border-radius: 10px;
-    	border: 2px solid #1a1a1a;
+.locations-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff6b35, #cc4a1a);
+    border-radius: 10px;
+    border: 2px solid #1a1a1a;
+}
+
+.locations-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff8c42, #e55a2e);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
 }
 
 /* Hover effect */
