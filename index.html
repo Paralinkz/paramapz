@@ -282,6 +282,26 @@
         transform: scale(1.1);
         box-shadow: 0 0 18px rgba(255, 107, 53, 0.85);
     }
+
+
+    /* Activity-based map marker glow */
+    .ed-marker.activity-low {
+        background: radial-gradient(circle, #44ff44, #1f8f1f);
+        border-color: #44ff44;
+        box-shadow: 0 0 14px rgba(68, 255, 68, 0.75);
+    }
+
+    .ed-marker.activity-moderate {
+        background: radial-gradient(circle, #ffaa44, #b86518);
+        border-color: #ffaa44;
+        box-shadow: 0 0 16px rgba(255, 170, 68, 0.78);
+    }
+
+    .ed-marker.activity-high {
+        background: radial-gradient(circle, #ff4444, #9f1f1f);
+        border-color: #ff4444;
+        box-shadow: 0 0 20px rgba(255, 68, 68, 0.90);
+    }
  
     @keyframes pulse {
         0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7); }
@@ -339,8 +359,9 @@
     .location-card {
         background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
         border: 1px solid #444;
+        border-top: 1px solid #444;
         border-radius: 15px;
-        padding: 28px 20px 20px 20px;
+        padding: 20px;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -349,165 +370,218 @@
         height: 100%;
         cursor: pointer;
     }
+
+    /* Removes the old full-width top activity bar */
+    .location-card::before {
+        display: none;
+    }
  
-    .location-card {
-    background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
-    border: 1px solid #444;
-    border-radius: 15px;
-    padding: 28px 20px 20px 20px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    cursor: pointer;
-}
+    .location-card:hover {
+        transform: translateY(-5px);
+        border-color: #ff6b35;
+    }
 
-.location-card::before {
-    content: attr(data-activity-label);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    color: #111;
-    text-align: center;
-}
+    .location-card.selected {
+        transform: translateY(-5px);
+        border-color: #ff8c42;
+    }
 
-.location-card:hover {
-    transform: translateY(-5px);
-    border-color: #ff6b35;
-}
+    /* Modern activity badge */
+    .activity-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        width: fit-content;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 0.75em;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 0.3px;
+    }
 
-.location-card.activity-high {
-    border-top: 10px solid #ff4444;
-    box-shadow: 0 0 10px rgba(255, 68, 68, 0.35);
-}
+    .activity-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
 
-.location-card.activity-high::before {
-    background: #ff4444;
-}
+    .activity-badge.low {
+        background: rgba(68, 255, 68, 0.12);
+        color: #44ff44;
+        border: 1px solid rgba(68, 255, 68, 0.45);
+        box-shadow: 0 0 8px rgba(68, 255, 68, 0.22);
+    }
 
-.location-card.activity-moderate {
-    border-top: 10px solid #ffaa44;
-    box-shadow: 0 0 8px rgba(255, 170, 68, 0.30);
-}
+    .activity-badge.low .activity-dot {
+        background: #44ff44;
+        box-shadow: 0 0 8px rgba(68, 255, 68, 0.7);
+    }
 
-.location-card.activity-moderate::before {
-    background: #ffaa44;
-}
+    .activity-badge.moderate {
+        background: rgba(255, 170, 68, 0.12);
+        color: #ffaa44;
+        border: 1px solid rgba(255, 170, 68, 0.45);
+        box-shadow: 0 0 8px rgba(255, 170, 68, 0.25);
+    }
 
-.location-card.activity-low {
-    border-top: 10px solid #44ff44;
-    box-shadow: 0 0 6px rgba(68, 255, 68, 0.25);
-}
+    .activity-badge.moderate .activity-dot {
+        background: #ffaa44;
+        box-shadow: 0 0 8px rgba(255, 170, 68, 0.7);
+    }
 
-.location-card.activity-low::before {
-    background: #44ff44;
-}
+    .activity-badge.high {
+        background: rgba(255, 68, 68, 0.12);
+        color: #ff4444;
+        border: 1px solid rgba(255, 68, 68, 0.50);
+        box-shadow: 0 0 10px rgba(255, 68, 68, 0.30);
+        animation: highBadgePulse 2.5s infinite;
+    }
 
-.location-card.activity-low:hover {
-    box-shadow: 0 0 12px rgba(68, 255, 68, 0.45);
-}
+    .activity-badge.high .activity-dot {
+        background: #ff4444;
+        box-shadow: 0 0 10px rgba(255, 68, 68, 0.85);
+    }
 
-.location-card.activity-moderate:hover {
-    box-shadow: 0 0 16px rgba(255, 170, 68, 0.50);
-}
+    @keyframes highBadgePulse {
+        0% { box-shadow: 0 0 8px rgba(255, 68, 68, 0.28); }
+        50% { box-shadow: 0 0 16px rgba(255, 68, 68, 0.55); }
+        100% { box-shadow: 0 0 8px rgba(255, 68, 68, 0.28); }
+    }
 
-.location-card.activity-high:hover {
-    box-shadow: 0 0 22px rgba(255, 68, 68, 0.65);
-}
+    /* Activity-based card glow */
+    .location-card.activity-low {
+        box-shadow: 0 0 8px rgba(68, 255, 68, 0.18);
+    }
 
-.location-story {
-    color: #ccc;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    display: -webkit-box;
-    -webkit-line-clamp: 10;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
+    .location-card.activity-moderate {
+        box-shadow: 0 0 10px rgba(255, 170, 68, 0.22);
+    }
 
-.location-features {
-    border-top: 1px solid #333;
-    padding-top: 15px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
+    .location-card.activity-high {
+        box-shadow: 0 0 12px rgba(255, 68, 68, 0.28);
+    }
 
-.location-card:hover .location-story,
-.location-card.expanded .location-story,
-.location-card:hover .location-features,
-.location-card.expanded .location-features {
-    display: block;
-    -webkit-line-clamp: unset;
-    overflow: visible;
-}
+    .location-card.activity-low:hover,
+    .location-card.activity-low.selected,
+    .location-card.activity-low.expanded {
+        box-shadow: 0 0 14px rgba(68, 255, 68, 0.50);
+    }
 
-.location-card.expanded {
-    transform: translateY(-5px) scale(1.01);
-    border-color: #ff8c42;
-}
+    .location-card.activity-moderate:hover,
+    .location-card.activity-moderate.selected,
+    .location-card.activity-moderate.expanded {
+        box-shadow: 0 0 18px rgba(255, 170, 68, 0.55);
+    }
 
-.location-card.activity-low.expanded,
-.location-card.activity-low.selected {
-    box-shadow: 0 0 14px rgba(68, 255, 68, 0.50);
-}
+    .location-card.activity-high:hover,
+    .location-card.activity-high.selected,
+    .location-card.activity-high.expanded {
+        box-shadow: 0 0 24px rgba(255, 68, 68, 0.70);
+    }
 
-.location-card.activity-moderate.expanded,
-.location-card.activity-moderate.selected {
-    box-shadow: 0 0 18px rgba(255, 170, 68, 0.55);
-}
+    .location-image {
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
-.location-card.activity-high.expanded,
-.location-card.activity-high.selected {
-    box-shadow: 0 0 24px rgba(255, 68, 68, 0.70);
-}
+    .location-image img {
+        max-width: 150px;
+        max-height: 150px;
+        width: auto;
+        height: auto;
+        border-radius: 10px;
+        border: 2px solid #444;
+        object-fit: cover;
+    }
+ 
+    .location-title {
+        color: #ff6b35;
+        font-size: 1.3em;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+ 
+    .location-type {
+        display: inline-block;
+        background: rgba(255, 107, 53, 0.2);
+        color: #ff6b35;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        margin-bottom: 15px;
+        border: 1px solid #ff6b35;
+    }
+ 
+    .location-story {
+        color: #ccc;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 10;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+ 
+    .location-features {
+        border-top: 1px solid #333;
+        padding-top: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 
-.expand-hint {
-    display: block;
-    margin-top: 12px;
-    color: #ff6b35;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-align: center;
-    opacity: 0.9;
-}
+    .location-card:hover .location-story,
+    .location-card.expanded .location-story,
+    .location-card:hover .location-features,
+    .location-card.expanded .location-features {
+        display: block;
+        -webkit-line-clamp: unset;
+        overflow: visible;
+    }
 
-.location-card.expanded .expand-hint::before {
-    content: 'Showing full details — ';
-    color: #ffaa44;
-}
+    .location-card.expanded {
+        transform: translateY(-5px) scale(1.01);
+        border-color: #ff8c42;
+    }
 
-.location-features h4 {
-    color: #ff6b35;
-    font-size: 0.9em;
-    margin-bottom: 8px;
-}
+    .expand-hint {
+        display: block;
+        margin-top: 12px;
+        color: #ff6b35;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-align: center;
+        opacity: 0.9;
+    }
 
-.features-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.feature-tag {
-    background: rgba(255, 107, 53, 0.1);
-    color: #ff6b35;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 0.8em;
-    border: 1px solid rgba(255, 107, 53, 0.3);
-}
+    .location-card.expanded .expand-hint::before {
+        content: 'Showing full details — ';
+        color: #ffaa44;
+    }
+ 
+    .location-features h4 {
+        color: #ff6b35;
+        font-size: 0.9em;
+        margin-bottom: 8px;
+    }
+ 
+    .features-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+ 
+    .feature-tag {
+        background: rgba(255, 107, 53, 0.1);
+        color: #ff6b35;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.8em;
+        border: 1px solid rgba(255, 107, 53, 0.3);
+    }
  
     .loading {
         text-align: center;
@@ -1168,8 +1242,10 @@
             markerIndex = {};
  
             locations.forEach(location => {
+                const normalizedActivity = normalizeActivityLevel(location.activityLevel);
+
                 const hauntedIcon = L.divIcon({
-                    className: 'ed-marker',
+                    className: `ed-marker activity-${normalizedActivity}`,
                     html: '📍',
                     iconSize: [24, 24],
                     iconAnchor: [12, 12]
@@ -1179,8 +1255,6 @@
 
                 marker.locationId = location.id;
                 markerIndex[location.id] = marker;
-
-                const normalizedActivity = normalizeActivityLevel(location.activityLevel);
  
                 const popupContent = `
                     <div style="max-width: 300px;">
@@ -1252,7 +1326,7 @@
                 const normalizedActivity = normalizeActivityLevel(location.activityLevel);
 
                 return `
-                    <div class="location-card activity-${escapeAttribute(normalizedActivity)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" data-activity-label="${escapeAttribute(getActivityLabel(normalizedActivity))}" style="display: flex; flex-direction: column; height: 100%;">
+                    <div class="location-card activity-${escapeAttribute(normalizedActivity)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" style="display: flex; flex-direction: column; height: 100%;">
                         ${location.imageUrl ? `
                             <div class="location-image">
                                 <img src="${escapeAttribute(location.imageUrl)}" 
@@ -1261,6 +1335,10 @@
                                      loading="lazy">
                             </div>
                         ` : ''}
+                        <div class="activity-badge ${escapeAttribute(normalizedActivity)}">
+                            <span class="activity-dot"></span>
+                            ${escapeHtml(getActivityLabel(normalizedActivity))}
+                        </div>
                         <div class="location-title">${escapeHtml(location.name)}</div>
                         <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
                         <div class="location-type">${escapeHtml(location.type)}</div>
@@ -1291,13 +1369,7 @@
 
             document.querySelectorAll('.location-card').forEach(card => {
                 card.addEventListener('click', () => {
-                    const wasExpanded = card.classList.contains('expanded');
-
-                    document.querySelectorAll('.location-card.expanded').forEach(openCard => {
-                        if (openCard !== card) openCard.classList.remove('expanded');
-                    });
-
-                    card.classList.toggle('expanded', !wasExpanded);
+                    card.classList.toggle('expanded');
                     setSelectedLocation(card.dataset.id, true, false);
                 });
             });
