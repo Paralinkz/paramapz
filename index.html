@@ -524,15 +524,38 @@
         border: 1px solid #ff6b35;
     }
  
-    .location-story {
-        color: #ccc;
-        line-height: 1.6;
-        margin-bottom: 15px;
-        display: -webkit-box;
-        -webkit-line-clamp: 10;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+.location-story {
+    position: relative;
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Fade effect at bottom */
+.location-story::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, #1f1f1f);
+    pointer-events: none;
+}
+
+/* Expanded state */
+.location-story.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+}
+
+.location-story.expanded::after {
+    display: none;
+}
  
     .location-features {
         border-top: 1px solid #333;
@@ -1397,6 +1420,13 @@ html {
                         <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
                         <div class="location-type">${escapeHtml(location.type)}</div>
                         <div class="location-story">${escapeHtml(location.story)}</div>
+						<div class="location-story" id="story-${location.id}">
+    						${escapeHtml(location.story)}
+						</div>
+
+						<span class="read-more" onclick="toggleReadMore('${location.id}', event)">
+    					Read more
+						</span>
                         <div class="location-features">
                             <h4>Reported Phenomena:</h4>
                             <div class="features-list">
