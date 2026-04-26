@@ -677,86 +677,88 @@
     }
  
     @media (max-width: 768px) {
-        .map-controls {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        
-        .generate-btn {
-            margin-left: 0;
-        }
-        
-        .header h1 {
-            font-size: 2em;
-        }
-        
-        .statistics {
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .legend-items {
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .legend-item {
-            justify-content: center;
-        }
-
-        .results-panel-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .locations-list {
-            grid-template-columns: 1fr;
+    .map-controls {
+        flex-direction: column;
+        align-items: stretch;
     }
-	/* ===== FADE SCROLLBAR (PREMIUM BEHAVIOR) ===== */
+    
+    .generate-btn {
+        margin-left: 0;
+    }
+    
+    .header h1 {
+        font-size: 2em;
+    }
+    
+    .statistics {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .legend-items {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .legend-item {
+        justify-content: center;
+    }
+
+    .results-panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .locations-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== GLOBAL DARK SCROLLBAR (FIXED) ===== */
 
 /* Firefox */
 html, body {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,107,53,0.6) transparent;
+    scrollbar-color: #ff6b35 #0f0f0f;
 }
 
 /* Chrome / Edge / Safari */
 html::-webkit-scrollbar,
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
     width: 8px;
 }
 
-/* Track stays invisible */
+/* Track */
 html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track {
-    background: transparent;
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+    background: #0f0f0f;
 }
 
-/* Thumb (hidden by default) */
+/* Thumb */
 html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, #ff6b35, #cc4a1a);
     border-radius: 999px;
-    border: 2px solid transparent;
-    opacity: 0;
-    transition: opacity 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #0f0f0f;
 }
 
-/* Show scrollbar when user interacts */
-body:hover::-webkit-scrollbar-thumb,
-body:active::-webkit-scrollbar-thumb {
-    opacity: 0.6;
-}
-
-/* Stronger on hover */
+/* Hover */
 html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover {
-    opacity: 1;
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff8c42, #e55a2e);
     box-shadow: 0 0 12px rgba(255, 107, 53, 0.7);
 }
-		
-    </style>
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+	</style>
 </head>
 <body>
  
