@@ -712,33 +712,50 @@
 
         .locations-list {
             grid-template-columns: 1fr;
-        }
-	/* Scrollbar ONLY for results list */
-.locations-list::-webkit-scrollbar {
+    }
+	/* ===== FADE SCROLLBAR (PREMIUM BEHAVIOR) ===== */
+
+/* Firefox */
+html, body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,107,53,0.6) transparent;
+}
+
+/* Chrome / Edge / Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
     width: 8px;
 }
 
-.locations-list::-webkit-scrollbar-track {
-    background: #1a1a1a;
-    border-radius: 10px;
+/* Track stays invisible */
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.locations-list::-webkit-scrollbar-thumb {
+/* Thumb (hidden by default) */
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, #ff6b35, #cc4a1a);
-    border-radius: 10px;
-    border: 2px solid #1a1a1a;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease, box-shadow 0.3s ease;
 }
 
-.locations-list::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #ff8c42, #e55a2e);
-    box-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
+/* Show scrollbar when user interacts */
+body:hover::-webkit-scrollbar-thumb,
+body:active::-webkit-scrollbar-thumb {
+    opacity: 0.6;
 }
 
-/* Hover effect */
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #ff8c42, #e55a2e);
-    box-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
-    }
+/* Stronger on hover */
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(255, 107, 53, 0.7);
+}
+		
     </style>
 </head>
 <body>
