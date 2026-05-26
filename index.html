@@ -1419,14 +1419,9 @@ html {
                         <div class="location-title">${escapeHtml(location.name)}</div>
                         <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
                         <div class="location-type">${escapeHtml(location.type)}</div>
-                        <div class="location-story">${escapeHtml(location.story)}</div>
-						<div class="location-story" id="story-${location.id}">
-    						${escapeHtml(location.story)}
-						</div>
-
-						<span class="read-more" onclick="toggleReadMore('${location.id}', event)">
-    					Read more
-						</span>
+                        <div class="location-story" id="story-${escapeAttribute(location.id)}">
+                            ${escapeHtml(location.story)}
+                        </div>
                         <div class="location-features">
                             <h4>Reported Phenomena:</h4>
                             <div class="features-list">
