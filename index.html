@@ -1217,7 +1217,7 @@ html {
                     location.state,
                     location.type,
                     location.story,
-                    Array.isArray(location.features) ? location.features.join(' ') : '',
+                    getCleanFeatures(location).join(' '),
                     normalizedActivity
                 ].join(' ').toLowerCase();
 
@@ -1288,6 +1288,24 @@ html {
             return 'Low Activity';
         }
 
+
+        function getCleanFeatures(location) {
+            const storyText = String(location.story || '').trim().toLowerCase();
+            const rawFeatures = Array.isArray(location.features)
+                ? location.features
+                : String(location.features || '')
+                    .split(/[,|;]/)
+                    .map(item => item.trim())
+                    .filter(Boolean);
+
+            return rawFeatures
+                .map(feature => String(feature || '').trim())
+                .filter(feature => {
+                    const cleanFeature = feature.toLowerCase();
+                    return cleanFeature && cleanFeature !== storyText;
+                });
+        }
+
         function setSelectedLocation(locationId, openPopup = true, scrollCardIntoView = true) {
             selectedLocationId = locationId;
 
@@ -1353,7 +1371,7 @@ html {
                         <div style="margin-bottom: 10px;">
                             <strong>Reported Phenomena:</strong>
                             <div style="margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px;">
-                                ${(location.features || []).map(feature => `<span style="background: rgba(255, 107, 53, 0.2); color: #ff6b35; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; border: 1px solid rgba(255, 107, 53, 0.3);">${escapeHtml(feature)}</span>`).join('')}
+                                ${getCleanFeatures(location).map(feature => `<span style="background: rgba(255, 107, 53, 0.2); color: #ff6b35; padding: 2px 6px; border-radius: 8px; font-size: 0.8em; border: 1px solid rgba(255, 107, 53, 0.3);">${escapeHtml(feature)}</span>`).join('')}
                             </div>
                         </div>
                         <div style="text-align: center; margin-top: 15px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
@@ -1419,13 +1437,18 @@ html {
                         <div class="location-title">${escapeHtml(location.name)}</div>
                         <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
                         <div class="location-type">${escapeHtml(location.type)}</div>
-                        <div class="location-story" id="story-${escapeAttribute(location.id)}">
-                            ${escapeHtml(location.story)}
-                        </div>
+                        <div class="location-story">${escapeHtml(location.story)}</div>
+						<div class="location-story" id="story-${location.id}">
+    						${escapeHtml(location.story)}
+						</div>
+
+						<span class="read-more" onclick="toggleReadMore('${location.id}', event)">
+    					Read more
+						</span>
                         <div class="location-features">
                             <h4>Reported Phenomena:</h4>
                             <div class="features-list">
-                                ${(location.features || []).map(feature => `<span class="feature-tag">${escapeHtml(feature)}</span>`).join('')}
+                                ${getCleanFeatures(location).map(feature => `<span class="feature-tag">${escapeHtml(feature)}</span>`).join('')}
                             </div>
                         </div>
                         ${location.imageSource ? `<div class="image-source-badge">Source: ${escapeHtml(location.imageSource)}</div>` : ''}
