@@ -1454,6 +1454,91 @@ html {
         .results-icon-btn { width: 34px; height: 34px; }
     }
 
+	
+    /* =========================================================
+       FINAL PAGE-FLOW OVERRIDES
+       These rules are intentionally last so older theme rules
+       cannot restore the oversized header or legend spacing.
+    ========================================================= */
+
+    body .container > .haunt-map-header {
+        min-height: 0 !important;
+        padding: clamp(20px, 3vw, 34px) 18px clamp(18px, 2.6vw, 28px) !important;
+        margin: 0 0 18px !important;
+        border-radius: 18px !important;
+    }
+
+    body .container > .haunt-map-header::before {
+        width: 420px !important;
+        height: 120px !important;
+    }
+
+    body .container > .haunt-map-header .haunt-map-title {
+        font-size: clamp(2.6rem, 5.8vw, 4.8rem) !important;
+        line-height: 0.95 !important;
+        letter-spacing: clamp(2px, 0.5vw, 6px) !important;
+    }
+
+    body .container > .haunt-map-header .haunt-map-tagline {
+        margin-top: 10px !important;
+        font-size: clamp(0.78rem, 1.2vw, 0.96rem) !important;
+        letter-spacing: clamp(1px, 0.22vw, 2px) !important;
+    }
+
+    body .container > .haunt-map-header .hero-divider {
+        margin-top: 13px !important;
+    }
+
+    body .container > .haunt-map-header .hero-divider span {
+        width: min(220px, 50vw) !important;
+    }
+
+    body .container > .legend {
+        margin: 0 0 18px !important;
+        padding: 16px 18px !important;
+        border-radius: 14px !important;
+    }
+
+    body .container > .legend .legend-heading {
+        align-items: center !important;
+        padding-bottom: 11px !important;
+        margin-bottom: 12px !important;
+    }
+
+    body .container > .legend .legend-heading h3 {
+        font-size: clamp(1.1rem, 1.8vw, 1.4rem) !important;
+    }
+
+    body .container > .legend .legend-heading p {
+        font-size: 0.82rem !important;
+        line-height: 1.4 !important;
+    }
+
+    body .container > .legend .legend-items {
+        gap: 10px !important;
+    }
+
+    body .container > .legend .legend-item {
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+        justify-content: flex-start !important;
+        text-align: left !important;
+    }
+
+    @media (max-width: 768px) {
+        body .container > .haunt-map-header {
+            padding: 20px 12px 18px !important;
+        }
+
+        body .container > .legend .legend-heading {
+            align-items: flex-start !important;
+        }
+
+        body .container > .legend .legend-items {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
 	</style>
 </head>
 <body>
@@ -1604,6 +1689,37 @@ html {
             </button>
         </div>
 
+
+        <!-- =========================================================
+             ACTIVITY LEVEL LEGEND
+        ========================================================= -->
+        <div class="legend">
+            <div class="legend-heading">
+                <div>
+                    <span class="legend-eyebrow">Map key</span>
+                    <h3>Activity Level Legend</h3>
+                </div>
+                <p>Review the marker colors before exploring the map and search results.</p>
+            </div>
+
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color activity-low-legend"></div>
+                    <span><strong>Low Activity</strong> — Occasional reported phenomena</span>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-color activity-moderate-legend"></div>
+                    <span><strong>Moderate Activity</strong> — Regular reported phenomena</span>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-color activity-high-legend"></div>
+                    <span><strong>High Activity</strong> — Frequent reported encounters</span>
+                </div>
+            </div>
+        </div>
+
         <div class="map-results-workspace">
             <div class="map-container">
                 <div id="map"></div>
@@ -1657,31 +1773,6 @@ html {
             </div>
         </div>
 
-        <!-- =========================================================
-             ACTIVITY LEVEL LEGEND
-        ========================================================= -->
-        <div class="legend">
-            <div class="legend-heading">
-                <div>
-                    <span class="legend-eyebrow">Map key</span>
-                    <h3>Activity Level Legend</h3>
-                </div>
-                <p>Marker colors indicate the frequency of reported paranormal activity.</p>
-            </div>
-            <div class="legend-items">
-                <div class="legend-item">
-                    <div class="legend-color activity-low-legend"></div>
-                    <span>Low Activity - Occasional phenomena</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color activity-moderate-legend"></div>
-                    <span>Moderate Activity - Regular phenomena</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color activity-high-legend"></div>
-                    <span>High Activity - Frequent encounters</span>
-                </div>
-            </div>
         </div>
 
     </div>
