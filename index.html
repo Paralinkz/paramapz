@@ -1575,7 +1575,236 @@ html {
         color: #9f9fa5 !important;
     }
 
-	</style>
+	
+    /* =========================================================
+       COMPACT STATISTICS + MOST POPULAR LOCATIONS
+    ========================================================= */
+
+    body .container > .statistics {
+        gap: 12px !important;
+        margin: 0 0 22px !important;
+    }
+
+    body .container > .statistics .stat-item {
+        min-height: 64px !important;
+        padding: 9px 12px !important;
+        border-radius: 12px !important;
+    }
+
+    body .container > .statistics .stat-item::before {
+        height: 2px !important;
+    }
+
+    body .container > .statistics .stat-number {
+        margin-bottom: 4px !important;
+        font-size: clamp(1.35rem, 2vw, 1.65rem) !important;
+    }
+
+    body .container > .statistics .stat-label {
+        font-size: 0.76rem !important;
+        line-height: 1.15 !important;
+    }
+
+    .popular-locations-section {
+        margin: 0 0 26px;
+        padding: clamp(20px, 3vw, 30px);
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(35,35,38,0.96), rgba(17,17,19,0.97));
+        box-shadow: 0 18px 42px rgba(0,0,0,0.28);
+    }
+
+    .popular-section-heading {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: 15px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .popular-section-heading h2 {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: clamp(1.35rem, 2vw, 1.75rem);
+    }
+
+    .popular-section-heading p {
+        max-width: 590px;
+        color: #aaaab0;
+        font-size: 0.86rem;
+        line-height: 1.5;
+        text-align: right;
+    }
+
+    .popular-eyebrow {
+        color: #ff6b35;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .popular-locations-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 15px;
+    }
+
+    .popular-location-card {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 14px;
+        background: rgba(255,255,255,0.025);
+        transition: border-color .2s ease, background .2s ease;
+    }
+
+    .popular-location-card:hover {
+        border-color: rgba(255,107,53,0.62);
+        background: rgba(255,107,53,0.045);
+    }
+
+    .popular-location-image {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 50% 35%, rgba(255,107,53,0.16), transparent 45%),
+            #171719;
+    }
+
+    .popular-location-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
+    .popular-image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        color: #7e7e84;
+        font-size: 2rem;
+    }
+
+    .popular-location-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 14px;
+    }
+
+    .popular-location-title {
+        margin: 0 0 5px;
+        color: #fff;
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+
+    .popular-location-place {
+        margin-bottom: 10px;
+        color: #9f9fa5;
+        font-size: 0.78rem;
+    }
+
+    .popular-card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 10px;
+    }
+
+    .popular-meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 999px;
+        color: #d5d5d8;
+        background: rgba(255,255,255,0.035);
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    .popular-rating {
+        color: #ffd36a;
+    }
+
+    .popular-location-story {
+        display: -webkit-box;
+        margin: 0 0 13px;
+        overflow: hidden;
+        color: #c5c5c9;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    .popular-view-btn {
+        width: 100%;
+        min-height: 39px;
+        margin-top: auto;
+        border: 1px solid rgba(255,107,53,0.65);
+        border-radius: 9px;
+        background: rgba(255,107,53,0.12);
+        color: #ff9a70;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .popular-view-btn:hover {
+        background: rgba(255,107,53,0.22);
+    }
+
+    .popular-empty-note {
+        grid-column: 1 / -1;
+        padding: 18px;
+        border: 1px dashed rgba(255,255,255,0.16);
+        border-radius: 12px;
+        color: #aaaab0;
+        text-align: center;
+    }
+
+    @media (max-width: 980px) {
+        .popular-locations-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px) {
+        .popular-section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .popular-section-heading p {
+            text-align: left;
+        }
+
+        .popular-locations-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 520px) {
+        body .container > .statistics {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+
+        body .container > .statistics .stat-item {
+            min-height: 58px !important;
+        }
+    }
+
+</style>
 </head>
 <body>
  
@@ -1793,6 +2022,27 @@ html {
                 <div class="stat-label">Total Locations</div>
             </div>
 
+        <!-- =========================================================
+             MOST POPULAR HAUNTED LOCATIONS
+        ========================================================= -->
+        <section class="popular-locations-section" aria-labelledby="popularLocationsTitle">
+            <div class="popular-section-heading">
+                <div>
+                    <span class="popular-eyebrow">Visitor favorites</span>
+                    <h2 id="popularLocationsTitle">Most Popular Haunted Locations</h2>
+                </div>
+                <p>
+                    Rankings use available page-view and saved-location data.
+                    Star ratings appear only when genuine visitor ratings exist.
+                </p>
+            </div>
+
+            <div id="popularLocationsGrid" class="popular-locations-grid" aria-live="polite">
+                <div class="popular-empty-note">Loading popular haunted locations...</div>
+            </div>
+        </section>
+
+
             <div class="stat-item stat-high">
                 <div class="stat-number" id="highActivity">4</div>
                 <div class="stat-label">High Activity</div>
@@ -1917,6 +2167,7 @@ html {
             saveBookmarksToStorage();
             updateBookmarkUI(locationId);
             updateBookmarkCount();
+            renderPopularLocations();
         }
 
         function updateBookmarkUI(locationId) {
@@ -2004,10 +2255,133 @@ html {
             `;
         }
  
+
+        function getNumericMetric(location, keys) {
+            for (const key of keys) {
+                const value = Number(location && location[key]);
+                if (Number.isFinite(value) && value >= 0) return value;
+            }
+            return 0;
+        }
+
+        function getPopularityScore(location) {
+            const views = getNumericMetric(location, ['views', 'viewCount', 'pageViews']);
+            const saves = getNumericMetric(location, ['saves', 'saveCount', 'bookmarkCount']);
+            const localSaveBonus = isBookmarked(location.id) ? 1 : 0;
+
+            return (views * 1) + (saves * 4) + localSaveBonus;
+        }
+
+        function getLocationRating(location) {
+            const rating = getNumericMetric(location, ['rating', 'averageRating', 'avgRating']);
+            const ratingCount = getNumericMetric(location, ['ratingCount', 'reviewCount', 'ratings']);
+
+            if (rating > 0 && ratingCount > 0) {
+                return {
+                    rating: Math.min(5, rating),
+                    count: ratingCount
+                };
+            }
+
+            return null;
+        }
+
+        function renderPopularLocations() {
+            const grid = document.getElementById('popularLocationsGrid');
+            if (!grid) return;
+
+            if (!Array.isArray(hauntedLocations) || hauntedLocations.length === 0) {
+                grid.innerHTML = '<div class="popular-empty-note">Popular locations will appear after location data loads.</div>';
+                return;
+            }
+
+            const ranked = [...hauntedLocations]
+                .map((location, originalIndex) => ({
+                    location,
+                    originalIndex,
+                    score: getPopularityScore(location)
+                }))
+                .sort((a, b) => {
+                    if (b.score !== a.score) return b.score - a.score;
+                    return a.originalIndex - b.originalIndex;
+                })
+                .slice(0, 6);
+
+            const hasTrackedPopularity = ranked.some(item => item.score > 0);
+
+            grid.innerHTML = ranked.map(({ location }) => {
+                const level = normalizeActivityLevel(location.activityLevel);
+                const views = getNumericMetric(location, ['views', 'viewCount', 'pageViews']);
+                const saves = getNumericMetric(location, ['saves', 'saveCount', 'bookmarkCount']);
+                const ratingData = getLocationRating(location);
+                const imageUrl = location.imageUrl || location.image || '';
+                const cityState = [location.city, location.state].filter(Boolean).join(', ');
+                const story = location.story || location.description || 'Explore the reports, history, and reported activity connected to this location.';
+
+                const imageMarkup = imageUrl
+                    ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(location.name || 'Haunted location')}" loading="lazy">`
+                    : '<div class="popular-image-placeholder" aria-hidden="true">⌖</div>';
+
+                const ratingMarkup = ratingData
+                    ? `<span class="popular-meta-chip popular-rating" title="${ratingData.count} genuine visitor ratings">★★★★★ ${ratingData.rating.toFixed(1)} (${ratingData.count})</span>`
+                    : '';
+
+                const popularityMarkup = hasTrackedPopularity
+                    ? `
+                        ${views > 0 ? `<span class="popular-meta-chip">${views.toLocaleString()} views</span>` : ''}
+                        ${saves > 0 ? `<span class="popular-meta-chip">${saves.toLocaleString()} saves</span>` : ''}
+                    `
+                    : '<span class="popular-meta-chip">Featured while popularity data grows</span>';
+
+                return `
+                    <article class="popular-location-card">
+                        <div class="popular-location-image">${imageMarkup}</div>
+                        <div class="popular-location-content">
+                            <h3 class="popular-location-title">${escapeHtml(location.name || 'Unnamed Location')}</h3>
+                            <div class="popular-location-place">${escapeHtml(cityState || 'Location details available on map')}</div>
+
+                            <div class="popular-card-meta">
+                                <span class="activity-badge ${level}">
+                                    <span class="activity-dot"></span>
+                                    ${level.charAt(0).toUpperCase() + level.slice(1)} Activity
+                                </span>
+                                ${popularityMarkup}
+                                ${ratingMarkup}
+                            </div>
+
+                            <p class="popular-location-story">${escapeHtml(story)}</p>
+
+                            <button
+                                class="popular-view-btn"
+                                type="button"
+                                data-popular-location-id="${escapeHtml(String(location.id || ''))}">
+                                View on Map
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            grid.querySelectorAll('[data-popular-location-id]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const locationId = button.getAttribute('data-popular-location-id');
+                    if (!locationId) return;
+
+                    const location = hauntedLocations.find(item => String(item.id) === String(locationId));
+                    if (location) {
+                        setSelectedLocation(locationId, true, true);
+                        const workspace = document.querySelector('.map-results-workspace');
+                        if (workspace) workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+
         function initializeApp() {
             updateStatistics();
             updateBookmarkCount();
             displayAllLocations();
+            renderPopularLocations();
         }
 
         function populateCityFilter() {
