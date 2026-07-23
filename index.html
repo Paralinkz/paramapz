@@ -1804,6 +1804,71 @@ html {
         }
     }
 
+
+    /* =========================================================
+       FINAL STATISTICS / POPULAR SECTION LAYOUT FIX
+       Keeps the four KPIs compact and places popular locations
+       on its own full-width row.
+    ========================================================= */
+
+    body .container > .statistics {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 0 20px !important;
+    }
+
+    body .container > .statistics > .stat-item {
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 66px !important;
+        min-height: 66px !important;
+        max-height: 66px !important;
+        padding: 7px 12px !important;
+        overflow: hidden !important;
+    }
+
+    body .container > .statistics > .stat-item .stat-number {
+        margin: 0 0 2px !important;
+        font-size: clamp(1.25rem, 1.8vw, 1.55rem) !important;
+        line-height: 1 !important;
+    }
+
+    body .container > .statistics > .stat-item .stat-label {
+        margin: 0 !important;
+        font-size: 0.72rem !important;
+        line-height: 1.1 !important;
+    }
+
+    body .container > .popular-locations-section {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 0 26px !important;
+    }
+
+    @media (max-width: 760px) {
+        body .container > .statistics {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+    }
+
+    @media (max-width: 420px) {
+        body .container > .statistics > .stat-item {
+            height: 60px !important;
+            min-height: 60px !important;
+            max-height: 60px !important;
+        }
+    }
+
 </style>
 </head>
 <body>
@@ -2021,6 +2086,21 @@ html {
                 <div class="stat-number" id="totalLocations">20</div>
                 <div class="stat-label">Total Locations</div>
             </div>
+<div class="stat-item stat-high">
+                <div class="stat-number" id="highActivity">4</div>
+                <div class="stat-label">High Activity</div>
+            </div>
+
+            <div class="stat-item stat-displayed">
+                <div class="stat-number" id="displayedCount">0</div>
+                <div class="stat-label">Currently Displayed</div>
+            </div>
+
+            <div class="stat-item stat-saved">
+                <div class="stat-number" id="bookmarkCount">0</div>
+                <div class="stat-label">Saved Locations</div>
+            </div>
+        </div>
 
         <!-- =========================================================
              MOST POPULAR HAUNTED LOCATIONS
@@ -2042,22 +2122,6 @@ html {
             </div>
         </section>
 
-
-            <div class="stat-item stat-high">
-                <div class="stat-number" id="highActivity">4</div>
-                <div class="stat-label">High Activity</div>
-            </div>
-
-            <div class="stat-item stat-displayed">
-                <div class="stat-number" id="displayedCount">0</div>
-                <div class="stat-label">Currently Displayed</div>
-            </div>
-
-            <div class="stat-item stat-saved">
-                <div class="stat-number" id="bookmarkCount">0</div>
-                <div class="stat-label">Saved Locations</div>
-            </div>
-        </div>
 
         </div>
 
