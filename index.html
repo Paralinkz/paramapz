@@ -1227,10 +1227,26 @@ html {
     ========================================================= */
     .map-results-workspace {
         display: grid;
-        grid-template-columns: minmax(0, 1.65fr) minmax(360px, 0.75fr);
+        grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.85fr);
         gap: 18px;
         align-items: start;
         margin-bottom: 24px;
+    }
+
+    /* Keep the professional split layout active on desktop-sized embeds. */
+    @media (min-width: 821px) {
+        .map-results-workspace {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.85fr) !important;
+            gap: 18px !important;
+            align-items: start !important;
+        }
+
+        .map-results-workspace .map-container,
+        .map-results-workspace .results-panel {
+            position: sticky !important;
+            top: 14px !important;
+        }
     }
 
     .map-results-workspace .map-container {
@@ -1420,7 +1436,7 @@ html {
 
     .keyboard-selected { outline: 2px solid rgba(255,140,66,.8); outline-offset: 2px; }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 820px) {
         .map-results-workspace { grid-template-columns: 1fr; }
         .map-results-workspace .map-container,
         .results-panel { position: relative; top: auto; }
