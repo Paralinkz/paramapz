@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParaMapz - Paranormal Locations</title>
+    <title>Haunt Map | Discover America's Most Haunted Places</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
@@ -582,23 +582,173 @@
         margin-bottom: 10px;
     }
  
-    .statistics {
-        background: rgba(42, 42, 42, 0.9);
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-around;
+    /* =========================================================
+       HAUNT MAP PAGE TITLE
+    ========================================================= */
+    .haunt-map-header {
+        position: relative;
         text-align: center;
+        padding: 38px 20px 34px;
+        margin-bottom: 20px;
+        overflow: hidden;
     }
- 
-    .stat-item {
+
+    .haunt-map-header::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 520px;
+        height: 180px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+            circle,
+            rgba(255, 107, 53, 0.12) 0%,
+            rgba(68, 255, 68, 0.05) 38%,
+            transparent 72%
+        );
+        pointer-events: none;
+    }
+
+    .haunt-map-title {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        font-size: clamp(3rem, 7vw, 5rem);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+    }
+
+    .haunt-title-orange {
         color: #ff6b35;
+        text-shadow:
+            0 0 10px rgba(255, 107, 53, 0.45),
+            0 0 28px rgba(255, 107, 53, 0.18);
     }
- 
+
+    .haunt-title-green {
+        color: #44ff44;
+        text-shadow:
+            0 0 10px rgba(68, 255, 68, 0.45),
+            0 0 28px rgba(68, 255, 68, 0.18);
+    }
+
+    .haunt-map-tagline {
+        position: relative;
+        z-index: 1;
+        margin: 16px 0 0;
+        color: #cccccc;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    /* =========================================================
+       STATISTIC CARDS
+    ========================================================= */
+    .statistics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin: 0 0 20px;
+        padding: 0;
+        background: transparent;
+    }
+
+    .stat-item {
+        position: relative;
+        min-height: 125px;
+        padding: 24px 15px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #ffffff;
+        background: linear-gradient(
+            145deg,
+            rgba(46, 46, 46, 0.98),
+            rgba(27, 27, 27, 0.98)
+        );
+        border: 1px solid #444444;
+        border-radius: 14px;
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.28),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        transition:
+            transform 0.25s ease,
+            border-color 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    .stat-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 12%;
+        width: 76%;
+        height: 3px;
+        border-radius: 0 0 10px 10px;
+        background: linear-gradient(90deg, transparent, #ff6b35, #44ff44, transparent);
+    }
+
+    .stat-item:hover {
+        transform: translateY(-4px);
+        border-color: rgba(255, 107, 53, 0.75);
+        box-shadow:
+            0 12px 30px rgba(0, 0, 0, 0.38),
+            0 0 18px rgba(255, 107, 53, 0.16);
+    }
+
     .stat-number {
-        font-size: 1.5em;
-        font-weight: bold;
+        margin-bottom: 7px;
+        color: #ff6b35;
+        font-size: clamp(1.8rem, 3vw, 2.35rem);
+        font-weight: 900;
+        line-height: 1;
+        text-shadow: 0 0 12px rgba(255, 107, 53, 0.28);
+    }
+
+    .stat-label {
+        color: #d3d3d3;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .stat-total::before {
+        background: linear-gradient(90deg, transparent, #ff6b35, transparent);
+    }
+
+    .stat-high::before {
+        background: linear-gradient(90deg, transparent, #ff4444, transparent);
+    }
+
+    .stat-displayed::before {
+        background: linear-gradient(90deg, transparent, #ffaa44, transparent);
+    }
+
+    .stat-saved::before {
+        background: linear-gradient(90deg, transparent, #44ff44, transparent);
+    }
+
+    .stat-high .stat-number {
+        color: #ff5555;
+        text-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+    }
+
+    .stat-displayed .stat-number {
+        color: #ffaa44;
+        text-shadow: 0 0 12px rgba(255, 170, 68, 0.3);
+    }
+
+    .stat-saved .stat-number {
+        color: #44ff44;
+        text-shadow: 0 0 12px rgba(68, 255, 68, 0.3);
     }
 
     .legend {
@@ -656,10 +806,6 @@
         font-size: 2em;
     }
     
-    .statistics {
-        flex-direction: column;
-        gap: 10px;
-    }
 
     .legend-items {
         flex-direction: column;
@@ -680,6 +826,356 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+    /* =========================================================
+       RESPONSIVE TITLE AND STATISTIC CARDS
+    ========================================================= */
+    @media (max-width: 900px) {
+        .statistics {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 520px) {
+        .haunt-map-header {
+            padding: 30px 12px 26px;
+        }
+
+        .haunt-map-title {
+            font-size: clamp(2.5rem, 15vw, 3.5rem);
+            letter-spacing: 2px;
+        }
+
+        .haunt-map-tagline {
+            font-size: 0.82rem;
+            letter-spacing: 1.25px;
+        }
+
+        .statistics {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .stat-item {
+            min-height: 105px;
+            padding: 20px 15px;
+        }
+    }
+
+
+    /* =========================================================
+       PARAMAPZ PREMIUM TOP-HALF REDESIGN — VERSION 2
+    ========================================================= */
+    :root {
+        --pm-orange: #ff6b35;
+        --pm-orange-light: #ff8c42;
+        --pm-green: #44ff44;
+        --pm-red: #ff4444;
+        --pm-gold: #ffaa44;
+        --pm-panel: rgba(28, 28, 30, 0.94);
+        --pm-panel-soft: rgba(42, 42, 44, 0.82);
+        --pm-border: rgba(255, 255, 255, 0.10);
+        --pm-muted: #b9b9bd;
+    }
+
+    body {
+        background:
+            radial-gradient(circle at 50% -10%, rgba(255, 107, 53, 0.13), transparent 34%),
+            radial-gradient(circle at 90% 24%, rgba(68, 255, 68, 0.04), transparent 26%),
+            linear-gradient(145deg, #090909 0%, #15100e 48%, #090909 100%);
+    }
+
+    .container {
+        width: min(100%, 1440px);
+        padding: 26px clamp(16px, 3vw, 34px) 50px;
+    }
+
+    .haunt-map-header {
+        isolation: isolate;
+        padding: clamp(42px, 7vw, 82px) 20px clamp(34px, 5vw, 55px);
+        margin-bottom: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 24px;
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.025), transparent),
+            radial-gradient(circle at 50% 40%, rgba(255,107,53,0.10), transparent 48%);
+        box-shadow: 0 26px 60px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .haunt-map-header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.28;
+        background-image:
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    .haunt-map-title {
+        font-size: clamp(3.25rem, 8vw, 6.65rem);
+        letter-spacing: clamp(2px, 0.7vw, 9px);
+        filter: drop-shadow(0 12px 24px rgba(0,0,0,0.45));
+    }
+
+    .haunt-map-tagline {
+        max-width: 760px;
+        margin: 20px auto 0;
+        color: #e2e2e4;
+        font-size: clamp(0.9rem, 1.5vw, 1.12rem);
+        letter-spacing: clamp(1.3px, 0.32vw, 3.2px);
+    }
+
+    .hero-divider {
+        display: flex;
+        justify-content: center;
+        margin-top: 24px;
+    }
+
+    .hero-divider span {
+        width: min(270px, 55vw);
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--pm-orange), var(--pm-green), transparent);
+        box-shadow: 0 0 14px rgba(255,107,53,0.35);
+    }
+
+    .map-controls {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(130px, 1fr));
+        align-items: end;
+        gap: 16px;
+        padding: clamp(20px, 3vw, 30px);
+        border: 1px solid var(--pm-border);
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(38,38,40,0.97), rgba(20,20,22,0.97));
+        box-shadow: 0 18px 40px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .controls-heading {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 25px;
+        padding-bottom: 17px;
+        margin-bottom: 2px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .controls-heading h2,
+    .legend-heading h3 {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: clamp(1.25rem, 2vw, 1.65rem);
+        letter-spacing: 0.3px;
+    }
+
+    .controls-heading p,
+    .legend-heading p {
+        max-width: 580px;
+        color: var(--pm-muted);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        text-align: right;
+    }
+
+    .controls-eyebrow,
+    .legend-eyebrow {
+        color: var(--pm-orange);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .search-row {
+        grid-column: 1 / -1;
+        margin: 2px 0 3px;
+    }
+
+    .search-wrap {
+        max-width: none;
+    }
+
+    .search-wrap input {
+        min-height: 52px;
+        padding-left: 18px;
+        border-color: rgba(255,255,255,0.14);
+        background: rgba(12,12,13,0.84);
+        font-size: 0.98rem;
+    }
+
+    .control-group {
+        min-width: 0;
+    }
+
+    .control-group label {
+        margin-left: 2px;
+        font-size: 0.76rem;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+    }
+
+    .control-group select {
+        width: 100%;
+        min-height: 44px;
+        border-color: rgba(255,255,255,0.12);
+        border-radius: 9px;
+        background: #242426;
+    }
+
+    .generate-btn {
+        width: 100%;
+        min-height: 44px;
+        margin-left: 0;
+        border-radius: 9px;
+        box-shadow: 0 8px 20px rgba(255,107,53,0.22);
+    }
+
+    .map-container {
+        padding: 10px;
+        border: 1px solid rgba(255,255,255,0.10);
+        border-radius: 19px;
+        background: rgba(20,20,22,0.95);
+        box-shadow: 0 22px 50px rgba(0,0,0,0.34);
+    }
+
+    #map {
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 13px;
+    }
+
+    .statistics {
+        gap: 18px;
+        margin-top: 4px;
+        margin-bottom: 22px;
+    }
+
+    .stat-item {
+        min-height: 132px;
+        border-color: rgba(255,255,255,0.09);
+        border-radius: 16px;
+        background:
+            radial-gradient(circle at 50% -15%, rgba(255,255,255,0.065), transparent 48%),
+            linear-gradient(145deg, rgba(42,42,44,0.98), rgba(20,20,22,0.98));
+    }
+
+    .stat-number {
+        font-size: clamp(2rem, 3vw, 2.55rem);
+    }
+
+    .legend {
+        padding: clamp(20px, 3vw, 28px);
+        border: 1px solid var(--pm-border);
+        border-radius: 16px;
+        background: linear-gradient(145deg, rgba(38,38,40,0.94), rgba(20,20,22,0.94));
+        box-shadow: 0 16px 36px rgba(0,0,0,0.24);
+    }
+
+    .legend-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 22px;
+        padding-bottom: 16px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .legend-items {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+    }
+
+    .legend-item {
+        min-height: 64px;
+        justify-content: center;
+        padding: 13px 15px;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 11px;
+        background: rgba(255,255,255,0.025);
+        text-align: center;
+    }
+
+    .legend-color {
+        flex: 0 0 auto;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        box-shadow: 0 0 12px currentColor;
+    }
+
+    @media (max-width: 1180px) {
+        .map-controls {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 768px) {
+        .controls-heading,
+        .legend-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .controls-heading p,
+        .legend-heading p {
+            text-align: left;
+        }
+
+        .map-controls {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: end;
+        }
+
+        .search-row,
+        .controls-heading {
+            grid-column: 1 / -1;
+        }
+
+        .legend-items {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 540px) {
+        .container {
+            padding-inline: 12px;
+        }
+
+        .haunt-map-header {
+            border-radius: 18px;
+        }
+
+        .map-controls {
+            grid-template-columns: 1fr;
+            padding: 18px;
+        }
+
+        .search-row,
+        .controls-heading {
+            grid-column: auto;
+        }
+
+        .control-group[style*="flex-direction: row"] {
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 9px;
+            background: rgba(255,255,255,0.025);
+        }
+
+        #map {
+            height: 540px;
+        }
+    }
 
 /* ===== GLOBAL DARK SCROLLBAR (FIXED) ===== */
 
@@ -729,44 +1225,27 @@ html {
 <body>
  
     <div class="container">
-        <div class="statistics">
-            <div class="stat-item">
-                <div class="stat-number" id="totalLocations">20</div>
-                <div>Total Locations</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="highActivity">4</div>
-                <div>High Activity</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="displayedCount">0</div>
-                <div>Currently Displayed</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="bookmarkCount">0</div>
-                <div>Saved Locations</div>
-            </div>
-        </div>
-
-        <div class="legend">
-            <h3 style="color: #ff6b35; margin-bottom: 15px; text-align: center;">Activity Level Legend</h3>
-            <div class="legend-items">
-                <div class="legend-item">
-                    <div class="legend-color activity-low-legend"></div>
-                    <span>Low Activity - Occasional phenomena</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color activity-moderate-legend"></div>
-                    <span>Moderate Activity - Regular phenomena</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color activity-high-legend"></div>
-                    <span>High Activity - Frequent encounters</span>
-                </div>
-            </div>
+        <!-- =========================================================
+             HAUNT MAP TITLE
+        ========================================================= -->
+        <div class="haunt-map-header">
+            <h1 class="haunt-map-title">
+                <span class="haunt-title-orange">Haunt</span>
+                <span class="haunt-title-green">Map</span>
+            </h1>
+            <p class="haunt-map-tagline">Discover America's Most Haunted Places</p>
+            <div class="hero-divider" aria-hidden="true"><span></span></div>
         </div>
  
         <div class="map-controls">
+            <div class="controls-heading">
+                <div>
+                    <span class="controls-eyebrow">Explore the unexplained</span>
+                    <h2>Find Your Next Haunt</h2>
+                </div>
+                <p>Search the map or narrow the results by location, type, and reported activity.</p>
+            </div>
+
             <div class="search-row">
                 <div class="search-wrap">
                     <input type="text" id="searchInput" placeholder="Search locations, cities, stories, or reported phenomena...">
@@ -893,6 +1372,58 @@ html {
 
         <div class="map-container">
             <div id="map"></div>
+        </div>
+
+        <!-- =========================================================
+             LOCATION STATISTIC CARDS
+        ========================================================= -->
+        <div class="statistics">
+            <div class="stat-item stat-total">
+                <div class="stat-number" id="totalLocations">20</div>
+                <div class="stat-label">Total Locations</div>
+            </div>
+
+            <div class="stat-item stat-high">
+                <div class="stat-number" id="highActivity">4</div>
+                <div class="stat-label">High Activity</div>
+            </div>
+
+            <div class="stat-item stat-displayed">
+                <div class="stat-number" id="displayedCount">0</div>
+                <div class="stat-label">Currently Displayed</div>
+            </div>
+
+            <div class="stat-item stat-saved">
+                <div class="stat-number" id="bookmarkCount">0</div>
+                <div class="stat-label">Saved Locations</div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             ACTIVITY LEVEL LEGEND
+        ========================================================= -->
+        <div class="legend">
+            <div class="legend-heading">
+                <div>
+                    <span class="legend-eyebrow">Map key</span>
+                    <h3>Activity Level Legend</h3>
+                </div>
+                <p>Marker colors indicate the frequency of reported paranormal activity.</p>
+            </div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color activity-low-legend"></div>
+                    <span>Low Activity - Occasional phenomena</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color activity-moderate-legend"></div>
+                    <span>Moderate Activity - Regular phenomena</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color activity-high-legend"></div>
+                    <span>High Activity - Frequent encounters</span>
+                </div>
+            </div>
         </div>
          
         <div class="results-panel">
