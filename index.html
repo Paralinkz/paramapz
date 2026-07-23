@@ -1539,6 +1539,42 @@ html {
         }
     }
 
+
+    /* =========================================================
+       LOCATION TITLE COLOR HIERARCHY
+       White titles improve readability. Orange is reserved for
+       interaction, selection, and branded accents.
+    ========================================================= */
+
+    .location-title,
+    .card-summary .location-title {
+        color: #ffffff !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+        transition:
+            color 0.2s ease,
+            text-shadow 0.2s ease;
+    }
+
+    .location-card:hover .location-title,
+    .location-card.selected .location-title,
+    .location-card.expanded .location-title,
+    .location-card.keyboard-selected .location-title {
+        color: #ff8c42 !important;
+        text-shadow:
+            0 0 10px rgba(255, 107, 53, 0.32),
+            0 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .location-type {
+        color: #ff8c42 !important;
+        border-color: rgba(255, 107, 53, 0.72) !important;
+        background: rgba(255, 107, 53, 0.11) !important;
+    }
+
+    .coordinates {
+        color: #9f9fa5 !important;
+    }
+
 	</style>
 </head>
 <body>
