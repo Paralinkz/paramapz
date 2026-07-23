@@ -1220,6 +1220,224 @@ body::-webkit-scrollbar-thumb:hover,
 html {
     scroll-behavior: smooth;
 }
+
+    /* =========================================================
+       PROFESSIONAL MAP + RESULTS WORKSPACE
+       Google Maps / Zillow-inspired browsing experience
+    ========================================================= */
+    .map-results-workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.65fr) minmax(360px, 0.75fr);
+        gap: 18px;
+        align-items: start;
+        margin-bottom: 24px;
+    }
+
+    .map-results-workspace .map-container {
+        position: sticky;
+        top: 14px;
+        margin-bottom: 0;
+    }
+
+    .map-results-workspace #map {
+        height: min(74vh, 760px);
+        min-height: 560px;
+    }
+
+    .results-panel {
+        position: sticky;
+        top: 14px;
+        display: flex;
+        flex-direction: column;
+        height: min(74vh, 760px);
+        min-height: 560px;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.10);
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(38,38,40,0.98), rgba(18,18,20,0.98));
+        box-shadow: 0 22px 50px rgba(0,0,0,0.34);
+    }
+
+    .results-panel-header {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 18px 18px 14px;
+        background: rgba(20,20,22,0.97);
+        border-bottom: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .results-heading-wrap { min-width: 0; }
+    .results-panel-header h3 { margin-bottom: 3px; font-size: 1.18rem; }
+
+    .results-nav {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex: 0 0 auto;
+    }
+
+    .results-icon-btn {
+        width: 38px;
+        height: 38px;
+        display: inline-grid;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,0.13);
+        border-radius: 9px;
+        background: rgba(255,255,255,0.045);
+        color: #f4f4f4;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+    .results-icon-btn:hover {
+        background: rgba(255,107,53,0.16);
+        border-color: rgba(255,107,53,0.7);
+        transform: translateY(-1px);
+    }
+
+    .results-help {
+        flex: 0 0 auto;
+        padding: 9px 18px;
+        color: #aaaab0;
+        background: rgba(255,255,255,0.018);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        font-size: .76rem;
+        line-height: 1.4;
+    }
+
+    .locations-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scroll-behavior: smooth;
+        padding: 12px 12px 18px;
+        scrollbar-width: auto;
+        scrollbar-color: #ff6b35 #151517;
+    }
+
+    .locations-list::-webkit-scrollbar { width: 13px; }
+    .locations-list::-webkit-scrollbar-track { background: #151517; border-left: 1px solid rgba(255,255,255,.05); }
+    .locations-list::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #ff8c42, #d65128);
+        border: 3px solid #151517;
+        border-radius: 999px;
+    }
+
+    .location-card {
+        flex: 0 0 auto;
+        height: auto !important;
+        min-height: 0;
+        padding: 0;
+        border-radius: 12px;
+        overflow: visible;
+        transform: none !important;
+    }
+
+    .location-card:hover { transform: none !important; }
+
+    .card-summary {
+        display: grid;
+        grid-template-columns: 82px minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px;
+    }
+
+    .card-thumb {
+        width: 82px;
+        height: 82px;
+        overflow: hidden;
+        border: 1px solid #444;
+        border-radius: 9px;
+        background: #18181a;
+    }
+
+    .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-thumb-placeholder { display:grid; place-items:center; width:100%; height:100%; color:#777; font-size:1.4rem; }
+    .card-summary-main { min-width: 0; }
+    .card-summary .location-title { margin: 4px 0 4px; font-size: 1rem; line-height: 1.25; }
+    .card-summary .coordinates { margin: 0 0 7px; font-size: .78rem; }
+    .card-summary .activity-badge { margin: 0; padding: 4px 8px; font-size: .68rem; }
+
+    .card-chevron {
+        width: 32px;
+        height: 32px;
+        border: 0;
+        border-radius: 8px;
+        color: #ddd;
+        background: rgba(255,255,255,.05);
+        cursor: pointer;
+        transition: transform .2s ease, background .2s ease;
+    }
+
+    .location-card.expanded .card-chevron { transform: rotate(180deg); background: rgba(255,107,53,.17); }
+
+    .card-details {
+        display: none;
+        padding: 0 14px 15px;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .location-card.expanded .card-details { display: block; }
+    .card-details .location-type { margin-top: 13px; margin-bottom: 10px; }
+    .card-details .location-story { font-size: .9rem; line-height: 1.55; }
+    .card-details .location-features { margin-top: 12px; }
+
+    .card-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+    }
+
+    .load-more-wrap {
+        flex: 0 0 auto;
+        padding: 12px;
+        border-top: 1px solid rgba(255,255,255,.07);
+        background: rgba(18,18,20,.98);
+    }
+
+    .load-more-btn {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid rgba(255,107,53,.65);
+        border-radius: 9px;
+        background: rgba(255,107,53,.12);
+        color: #ff9a70;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .load-more-btn:hover { background: rgba(255,107,53,.22); }
+    .load-more-btn[hidden] { display: none; }
+
+    .keyboard-selected { outline: 2px solid rgba(255,140,66,.8); outline-offset: 2px; }
+
+    @media (max-width: 1080px) {
+        .map-results-workspace { grid-template-columns: 1fr; }
+        .map-results-workspace .map-container,
+        .results-panel { position: relative; top: auto; }
+        .results-panel { height: 680px; min-height: 520px; }
+        .map-results-workspace #map { height: 560px; min-height: 460px; }
+    }
+
+    @media (max-width: 540px) {
+        .results-panel { height: 72vh; min-height: 500px; border-radius: 14px; }
+        .results-panel-header { padding: 14px; }
+        .results-help { padding-inline: 14px; }
+        .card-summary { grid-template-columns: 68px minmax(0, 1fr) auto; gap: 9px; padding: 10px; }
+        .card-thumb { width: 68px; height: 68px; }
+        .results-nav { gap: 4px; }
+        .results-icon-btn { width: 34px; height: 34px; }
+    }
+
 	</style>
 </head>
 <body>
@@ -1370,8 +1588,32 @@ html {
             </button>
         </div>
 
-        <div class="map-container">
-            <div id="map"></div>
+        <div class="map-results-workspace">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+
+            <aside class="results-panel" aria-label="Haunted location search results">
+                <div class="results-panel-header">
+                    <div class="results-heading-wrap">
+                        <h3>Search Results</h3>
+                        <div class="results-subtext" id="resultsSummary">Showing 0 locations</div>
+                    </div>
+                    <div class="results-nav" aria-label="Results navigation">
+                        <button class="results-icon-btn" id="previousResultBtn" type="button" title="Previous location" aria-label="Previous location">↑</button>
+                        <button class="results-icon-btn" id="nextResultBtn" type="button" title="Next location" aria-label="Next location">↓</button>
+                        <button class="results-icon-btn" id="resultsTopBtn" type="button" title="Scroll to top" aria-label="Scroll results to top">⇡</button>
+                        <button class="results-icon-btn" id="resultsBottomBtn" type="button" title="Scroll to bottom" aria-label="Scroll results to bottom">⇣</button>
+                    </div>
+                </div>
+                <div class="results-help">Use ↑ and ↓ to browse. Press Enter to open the selected location. Scroll anywhere inside this panel.</div>
+                <div id="locationsList" class="locations-list" tabindex="0" aria-live="polite">
+                    <!-- Generated locations will appear here -->
+                </div>
+                <div class="load-more-wrap">
+                    <button class="load-more-btn" id="loadMoreResults" type="button" hidden>Load More Locations</button>
+                </div>
+            </aside>
         </div>
 
         <!-- =========================================================
@@ -1425,16 +1667,7 @@ html {
                 </div>
             </div>
         </div>
-         
-        <div class="results-panel">
-            <div class="results-panel-header">
-                <h3>Search Results</h3>
-                <div class="results-subtext" id="resultsSummary">Showing 0 locations</div>
-            </div>
-            <div id="locationsList" class="locations-list">
-                <!-- Generated locations will appear here -->
-            </div>
-        </div>
+
     </div>
  
     <!-- Leaflet JavaScript -->
@@ -1864,70 +2097,135 @@ html {
             }
         }
  
-        function displayLocationsList(locations) {
+        const RESULTS_PAGE_SIZE = 20;
+        let resultsRenderLimit = RESULTS_PAGE_SIZE;
+        let lastResultsSet = [];
+        let keyboardResultIndex = -1;
+
+        function displayLocationsList(locations, preserveLimit = false) {
             const listContainer = document.getElementById('locationsList');
+            const loadMoreButton = document.getElementById('loadMoreResults');
+            lastResultsSet = [...locations];
+
+            if (!preserveLimit) resultsRenderLimit = RESULTS_PAGE_SIZE;
 
             if (!locations.length) {
                 listContainer.innerHTML = `<div class="no-results">No locations matched your search or filters.</div>`;
+                loadMoreButton.hidden = true;
+                keyboardResultIndex = -1;
                 updateResultsSummary(0);
                 return;
             }
-            
-            listContainer.innerHTML = locations.map(location => {
+
+            const visibleLocations = locations.slice(0, resultsRenderLimit);
+
+            listContainer.innerHTML = visibleLocations.map(location => {
                 const normalizedActivity = normalizeActivityLevel(location.activityLevel);
                 const storyText = truncateText(location.story, 600);
                 const displayFeatures = getCleanFeatures(location);
+                const isExpanded = selectedLocationId === location.id;
 
                 return `
-                    <div class="location-card activity-${escapeAttribute(normalizedActivity)} ${selectedLocationId === location.id ? 'selected' : ''}" data-id="${escapeAttribute(location.id)}" style="display: flex; flex-direction: column; height: 100%;">
-                        ${location.imageUrl ? `
-                            <div class="location-image">
-                                <img src="${escapeAttribute(location.imageUrl)}" 
-                                     alt="${escapeAttribute(location.name)}" 
-                                     onerror="this.style.display='none'"
-                                     loading="lazy">
+                    <article class="location-card activity-${escapeAttribute(normalizedActivity)} ${isExpanded ? 'selected expanded' : ''}"
+                             data-id="${escapeAttribute(location.id)}"
+                             tabindex="-1"
+                             aria-expanded="${isExpanded}">
+                        <div class="card-summary">
+                            <div class="card-thumb">
+                                ${location.imageUrl
+                                    ? `<img src="${escapeAttribute(location.imageUrl)}" alt="${escapeAttribute(location.name)}" onerror="this.parentElement.innerHTML='<span class=\\'card-thumb-placeholder\\'>📍</span>'" loading="lazy">`
+                                    : `<span class="card-thumb-placeholder">📍</span>`}
                             </div>
-                        ` : ''}
-                        <div class="activity-badge ${escapeAttribute(normalizedActivity)}">
-                            <span class="activity-dot"></span>
-                            ${escapeHtml(getActivityLabel(normalizedActivity))}
+                            <div class="card-summary-main">
+                                <div class="activity-badge ${escapeAttribute(normalizedActivity)}">
+                                    <span class="activity-dot"></span>
+                                    ${escapeHtml(getActivityLabel(normalizedActivity))}
+                                </div>
+                                <div class="location-title">${escapeHtml(location.name)}</div>
+                                <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
+                            </div>
+                            <button class="card-chevron" type="button" aria-label="Show location details" title="Show details">⌄</button>
                         </div>
-                        <div class="location-title">${escapeHtml(location.name)}</div>
-                        <div class="coordinates">${escapeHtml(location.city)}, ${escapeHtml(location.state)}</div>
-                        <div class="location-type">${escapeHtml(location.type)}</div>
-                        <div class="location-story">${escapeHtml(storyText)}</div>
-                        <div class="location-features">
-                            <h4>Reported Phenomena:</h4>
-                            <div class="features-list">
-                                ${displayFeatures.length 
-                                    ? displayFeatures.map(feature => `<span class="feature-tag">${escapeHtml(feature)}</span>`).join('')
-                                    : `<span class="feature-tag">No phenomena listed</span>`}
+
+                        <div class="card-details">
+                            <div class="location-type">${escapeHtml(location.type)}</div>
+                            <div class="location-story">${escapeHtml(storyText)}</div>
+                            <div class="location-features">
+                                <h4>Reported Phenomena:</h4>
+                                <div class="features-list">
+                                    ${displayFeatures.length
+                                        ? displayFeatures.map(feature => `<span class="feature-tag">${escapeHtml(feature)}</span>`).join('')
+                                        : `<span class="feature-tag">No phenomena listed</span>`}
+                                </div>
+                            </div>
+                            ${location.imageSource ? `<div class="image-source-badge">Source: ${escapeHtml(location.imageSource)}</div>` : ''}
+                            <div class="card-actions">
+                                <a href="${getDirectionsUrl(location.coordinates)}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="directions-link"
+                                   onclick="event.stopPropagation()"
+                                   style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,107,53,.16);color:#ff9a70;padding:7px 11px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.78rem;border:1px solid rgba(255,107,53,.65);">
+                                    Directions
+                                </a>
+                                ${getCardBookmarkButton(location.id)}
                             </div>
                         </div>
-                        ${location.imageSource ? `<div class="image-source-badge">Source: ${escapeHtml(location.imageSource)}</div>` : ''}
-                        <div style="flex: 1;"></div>
-                        <div style="text-align: center; padding-top: 15px; margin-top: auto; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                            <a href="${getDirectionsUrl(location.coordinates)}" 
-                               target="_blank" 
-                               rel="noopener noreferrer" 
-                               onclick="event.stopPropagation()"
-                               style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 107, 53, 0.2); color: #ff8c42; padding: 4px 10px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 0.75em; border: 1px solid #ff6b35;">
-                                <svg viewBox="0 0 24 24" width="12" height="12" style="width: 12px !important; height: 12px !important; min-width: 12px; max-width: 12px; fill: currentColor;"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
-                                Directions
-                            </a>
-                            ${getCardBookmarkButton(location.id)}
-                        </div>
-                    </div>
+                    </article>
                 `;
             }).join('');
 
+            bindResultCardEvents();
+            loadMoreButton.hidden = visibleLocations.length >= locations.length;
+            loadMoreButton.textContent = `Load More Locations (${locations.length - visibleLocations.length} remaining)`;
+            updateResultsSummary(locations.length, visibleLocations.length);
+
+            if (selectedLocationId) {
+                const selectedIndex = visibleLocations.findIndex(location => location.id === selectedLocationId);
+                keyboardResultIndex = selectedIndex >= 0 ? selectedIndex : 0;
+            } else {
+                keyboardResultIndex = visibleLocations.length ? 0 : -1;
+            }
+            updateKeyboardSelection(false);
+        }
+
+        function bindResultCardEvents() {
             document.querySelectorAll('.location-card').forEach(card => {
-                card.addEventListener('click', () => {
+                card.addEventListener('click', event => {
+                    if (event.target.closest('a, button[data-bookmark-id]')) return;
+                    const shouldExpand = !card.classList.contains('expanded');
+                    document.querySelectorAll('.location-card.expanded').forEach(other => {
+                        if (other !== card) {
+                            other.classList.remove('expanded');
+                            other.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                    card.classList.toggle('expanded', shouldExpand);
+                    card.setAttribute('aria-expanded', String(shouldExpand));
                     setSelectedLocation(card.dataset.id, true, false);
                 });
-            });
 
-            updateResultsSummary(locations.length);
+                const chevron = card.querySelector('.card-chevron');
+                chevron?.addEventListener('click', event => {
+                    event.stopPropagation();
+                    card.click();
+                });
+            });
+        }
+
+        function updateKeyboardSelection(scroll = true) {
+            const cards = [...document.querySelectorAll('.location-card')];
+            cards.forEach((card, index) => card.classList.toggle('keyboard-selected', index === keyboardResultIndex));
+            const activeCard = cards[keyboardResultIndex];
+            if (activeCard && scroll) activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function moveResultSelection(direction) {
+            const cards = [...document.querySelectorAll('.location-card')];
+            if (!cards.length) return;
+            keyboardResultIndex = Math.max(0, Math.min(cards.length - 1, keyboardResultIndex + direction));
+            updateKeyboardSelection(true);
+            setSelectedLocation(cards[keyboardResultIndex].dataset.id, false, false);
         }
 
         function truncateText(value, maxLength = 600) {
@@ -1993,7 +2291,7 @@ html {
             document.getElementById('displayedCount').textContent = count;
         }
 
-        function updateResultsSummary(count) {
+        function updateResultsSummary(count, visibleCount = Math.min(count, resultsRenderLimit)) {
             const summary = document.getElementById('resultsSummary');
             if (summary) summary.textContent = `Showing ${count} location${count === 1 ? '' : 's'}`;
         }
@@ -2021,6 +2319,51 @@ html {
         document.getElementById('activityLevel').addEventListener('change', filterAndDisplayLocations);
         document.getElementById('sortOrder').addEventListener('change', filterAndDisplayLocations);
         document.getElementById('searchInput').addEventListener('input', filterAndDisplayLocations);
+
+        // Professional results navigation controls
+        document.getElementById('loadMoreResults')?.addEventListener('click', () => {
+            resultsRenderLimit += RESULTS_PAGE_SIZE;
+            displayLocationsList(lastResultsSet, true);
+        });
+
+        document.getElementById('previousResultBtn')?.addEventListener('click', () => moveResultSelection(-1));
+        document.getElementById('nextResultBtn')?.addEventListener('click', () => moveResultSelection(1));
+        document.getElementById('resultsTopBtn')?.addEventListener('click', () => {
+            document.getElementById('locationsList')?.scrollTo({ top: 0, behavior: 'smooth' });
+            keyboardResultIndex = 0;
+            updateKeyboardSelection(false);
+        });
+        document.getElementById('resultsBottomBtn')?.addEventListener('click', () => {
+            const list = document.getElementById('locationsList');
+            list?.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
+            keyboardResultIndex = Math.max(0, document.querySelectorAll('.location-card').length - 1);
+            updateKeyboardSelection(false);
+        });
+
+        const resultsPanel = document.querySelector('.results-panel');
+        resultsPanel?.addEventListener('wheel', event => {
+            const list = document.getElementById('locationsList');
+            if (!list || event.target.closest('select, input')) return;
+            list.scrollTop += event.deltaY;
+            event.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('keydown', event => {
+            const activeTag = document.activeElement?.tagName;
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(activeTag)) return;
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                moveResultSelection(1);
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                moveResultSelection(-1);
+            } else if (event.key === 'Enter' && keyboardResultIndex >= 0) {
+                event.preventDefault();
+                const cards = [...document.querySelectorAll('.location-card')];
+                cards[keyboardResultIndex]?.click();
+            }
+        });
+
     </script>
 </body>
 </html>
