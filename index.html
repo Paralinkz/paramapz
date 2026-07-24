@@ -2774,55 +2774,49 @@ html {
             worldCopyJump: false
         });
 
-        const primaryTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 19
-        });
-
-        const fallbackTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Detailed street map is the default so users can see road names,
+        // intersections, crossroads, highways, and nearby landmarks.
+        const streetTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 19
+            minZoom: 3,
+            maxZoom: 19,
+            detectRetina: true
         });
 
-        const secondaryTiles = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+        // Keep the original dark map available as an optional visual theme.
+        const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
-            maxZoom: 19
+            minZoom: 3,
+            maxZoom: 19,
+            detectRetina: true
         });
 
-        let currentTileLayer = primaryTiles;
+        let currentTileLayer = streetTiles;
         currentTileLayer.addTo(map);
 
+        // Let visitors switch between street detail and the darker theme.
+        L.control.layers({
+            'Street & Crossroads': streetTiles,
+            'Dark Theme': darkTiles
+        }, null, {
+            position: 'topright',
+            collapsed: true
+        }).addTo(map);
+
+        // If the street tiles fail repeatedly, fall back to the dark layer.
         let tileErrorCount = 0;
-        map.on('tileerror', function(error) {
-            console.log('Tile loading error:', error);
+        streetTiles.on('tileerror', function(error) {
+            console.log('Street tile loading error:', error);
             tileErrorCount++;
-            
-            if (tileErrorCount > 3) {
-                console.log('Switching to fallback tiles...');
-                map.removeLayer(currentTileLayer);
-                
-                if (currentTileLayer === primaryTiles) {
-                    currentTileLayer = secondaryTiles;
-                    currentTileLayer.addTo(map);
-                } else if (currentTileLayer === secondaryTiles) {
-                    currentTileLayer = fallbackTiles;
-                    currentTileLayer.addTo(map);
-                }
-                
+
+            if (tileErrorCount > 3 && map.hasLayer(streetTiles)) {
+                map.removeLayer(streetTiles);
+                darkTiles.addTo(map);
+                currentTileLayer = darkTiles;
                 tileErrorCount = 0;
             }
         });
-
-        setTimeout(() => {
-            if (tileErrorCount > 0) {
-                console.log('Force switching to OpenStreetMap tiles...');
-                map.removeLayer(currentTileLayer);
-                currentTileLayer = fallbackTiles;
-                currentTileLayer.addTo(map);
-            }
-        }, 5000);
  
         // Individual quiet markers. Numbered clustering was removed because it
         // distracted from the page content and recreated marker elements while
