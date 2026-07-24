@@ -7,8 +7,6 @@
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
     
     <style>
     /* Custom Leaflet control styling */
@@ -2236,12 +2234,13 @@ html {
 
 
     /* =========================================================
-       QUIET MAP MARKERS + NEUTRAL CLUSTERS
-       Keeps map locations visible without competing with content.
+       QUIET, STABLE MAP MARKERS
+       Individual neutral dots with no numbering, clustering,
+       scaling, pulsing, or activity colors.
     ========================================================= */
     .ed-marker {
-        width: 12px !important;
-        height: 12px !important;
+        width: 14px !important;
+        height: 14px !important;
         display: grid !important;
         place-items: center !important;
         border: 0 !important;
@@ -2251,45 +2250,57 @@ html {
         animation: none !important;
         opacity: 0.72;
         cursor: pointer;
-        transition: opacity .18s ease, transform .18s ease !important;
+        transform: none !important;
+        transition: opacity .15s ease !important;
     }
 
     .ed-marker-core {
         width: 10px;
         height: 10px;
         display: block;
+        box-sizing: border-box;
         border: 1px solid rgba(255,255,255,.48);
         border-radius: 50%;
         background: #7f878c;
-        box-shadow: 0 1px 3px rgba(0,0,0,.38);
-        transition: width .18s ease, height .18s ease, border-color .18s ease,
-                    background-color .18s ease, box-shadow .18s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,.42);
+        transform: none !important;
+        transition: border-color .15s ease, background-color .15s ease,
+                    box-shadow .15s ease !important;
     }
 
-    .ed-marker:hover,
-    .ed-marker.selected {
+    .ed-marker:hover {
         opacity: 1;
-        transform: scale(1.25) !important;
+        transform: none !important;
         box-shadow: none !important;
+        z-index: 900 !important;
     }
 
     .ed-marker:hover .ed-marker-core {
-        width: 12px;
-        height: 12px;
-        border: 2px solid #fff;
-        background: #959da2;
-        box-shadow: 0 1px 4px rgba(0,0,0,.48);
+        width: 10px;
+        height: 10px;
+        border: 2px solid #ffffff;
+        background: #949ca1;
+        box-shadow: 0 1px 4px rgba(0,0,0,.5);
+        transform: none !important;
+    }
+
+    .ed-marker.selected {
+        opacity: 1;
+        transform: none !important;
+        box-shadow: none !important;
+        z-index: 1000 !important;
     }
 
     .ed-marker.selected .ed-marker-core {
-        width: 12px;
-        height: 12px;
-        border: 2px solid #fff;
+        width: 10px;
+        height: 10px;
+        border: 2px solid #ffffff;
         background: #ff8c42;
-        box-shadow: 0 1px 4px rgba(0,0,0,.5);
+        box-shadow: 0 1px 4px rgba(0,0,0,.52);
+        transform: none !important;
     }
 
-    /* Neutralize old activity marker classes if cached markup remains. */
+    /* Neutralize legacy activity-marker declarations. */
     .ed-marker.activity-low,
     .ed-marker.activity-moderate,
     .ed-marker.activity-high {
@@ -2297,39 +2308,12 @@ html {
         border-color: transparent !important;
         box-shadow: none !important;
         animation: none !important;
-    }
-
-    .pm-cluster-shell {
-        background: transparent !important;
-        border: 0 !important;
-    }
-
-    .pm-cluster-count {
-        width: 32px;
-        height: 32px;
-        display: grid;
-        place-items: center;
-        border: 1px solid rgba(255,255,255,.58);
-        border-radius: 50%;
-        background: rgba(35,40,43,.92);
-        color: #f3f4f5;
-        font-size: .75rem;
-        font-weight: 800;
-        line-height: 1;
-        box-shadow: 0 2px 7px rgba(0,0,0,.42);
-        transition: transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-
-    .pm-cluster-shell:hover .pm-cluster-count {
-        transform: scale(1.08);
-        border-color: #fff;
-        background: rgba(48,54,58,.97);
+        transform: none !important;
     }
 
     @media (prefers-reduced-motion: reduce) {
         .ed-marker,
-        .ed-marker-core,
-        .pm-cluster-count {
+        .ed-marker-core {
             transition: none !important;
             animation: none !important;
         }
@@ -2643,7 +2627,6 @@ html {
  
     <!-- Leaflet JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
     
     <script>
         let map = L.map('map', {
@@ -2704,23 +2687,10 @@ html {
             }
         }, 5000);
  
-        let markersGroup = L.markerClusterGroup({
-            showCoverageOnHover: false,
-            spiderfyOnMaxZoom: true,
-            removeOutsideVisibleBounds: true,
-            animate: true,
-            maxClusterRadius: 48,
-            disableClusteringAtZoom: 11,
-            iconCreateFunction(cluster) {
-                const count = cluster.getChildCount();
-                return L.divIcon({
-                    className: 'pm-cluster-shell',
-                    html: `<span class="pm-cluster-count">${count}</span>`,
-                    iconSize: [34, 34],
-                    iconAnchor: [17, 17]
-                });
-            }
-        }).addTo(map);
+        // Individual quiet markers. Numbered clustering was removed because it
+        // distracted from the page content and recreated marker elements while
+        // zooming, which caused hover flicker.
+        let markersGroup = L.layerGroup().addTo(map);
         let markerIndex = {};
         let selectedLocationId = null;
         let hauntedLocations = [];
@@ -3133,12 +3103,8 @@ html {
                     if (openPopup) marker.openPopup();
                 };
 
-                if (typeof markersGroup.zoomToShowLayer === 'function') {
-                    markersGroup.zoomToShowLayer(marker, revealMarker);
-                } else {
-                    map.setView(marker.getLatLng(), Math.max(map.getZoom(), 8), { animate: true });
-                    revealMarker();
-                }
+                map.setView(marker.getLatLng(), Math.max(map.getZoom(), 8), { animate: true });
+                window.setTimeout(revealMarker, 250);
             }
         }
  
@@ -3152,8 +3118,8 @@ html {
                 const hauntedIcon = L.divIcon({
                     className: 'ed-marker',
                     html: '<span class="ed-marker-core" aria-hidden="true"></span>',
-                    iconSize: [12, 12],
-                    iconAnchor: [6, 6],
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7],
                     popupAnchor: [0, -8]
                 });
  
