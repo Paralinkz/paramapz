@@ -2367,6 +2367,36 @@ html {
         border: 2px solid #fff !important;
         background: #ff8c42 !important;
     }
+
+
+    /* Keep location popups completely inside the visible map. */
+    .haunted-popup .leaflet-popup-content-wrapper {
+        box-sizing: border-box;
+        max-width: calc(100vw - 48px);
+    }
+
+    .haunted-popup .leaflet-popup-content {
+        box-sizing: border-box;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+    }
+
+    .haunted-popup .leaflet-popup-scrolled {
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        padding-right: 8px;
+    }
+
+    @media (max-width: 600px) {
+        .haunted-popup .leaflet-popup-content-wrapper {
+            max-width: calc(100vw - 32px);
+        }
+
+        .haunted-popup .leaflet-popup-content {
+            margin: 12px !important;
+        }
+    }
 </style>
 </head>
 <body>
@@ -3230,10 +3260,16 @@ html {
                     </div>
                 `;
  
+                const popupMaxHeight = Math.max(240, Math.min(380, map.getSize().y - 120));
+
                 marker.bindPopup(popupContent, {
                     maxWidth: 320,
-                    maxHeight: 600,
-                    className: 'haunted-popup'
+                    maxHeight: popupMaxHeight,
+                    className: 'haunted-popup',
+                    autoPan: true,
+                    keepInView: true,
+                    autoPanPaddingTopLeft: L.point(40, 70),
+                    autoPanPaddingBottomRight: L.point(40, 50)
                 });
 
 
@@ -3243,8 +3279,17 @@ html {
                     marker.openPopup();
                 });
 
-                marker.on('popupopen', () => {
+                marker.on('popupopen', event => {
                     setSelectedLocation(location.id, false, true);
+
+                    // Let Leaflet measure the completed popup, then pan it fully
+                    // inside the map with safe space around every edge.
+                    window.requestAnimationFrame(() => {
+                        const popup = event.popup;
+                        if (popup && typeof popup._adjustPan === 'function') {
+                            popup._adjustPan();
+                        }
+                    });
                 });
             });
 
