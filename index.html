@@ -2410,16 +2410,16 @@ html {
         font-size: 18px !important;
         line-height: 24px !important;
         text-align: center !important;
-        transform: translateY(-1px);
-        transform-origin: 50% 100%;
-        transition: transform .12s ease !important;
+        transform: none !important;
+        transition: opacity .15s ease !important;
         cursor: pointer !important;
     }
 
     .map-result-pin-wrapper:hover .map-result-pin,
     .map-result-pin-wrapper:focus .map-result-pin,
     .map-result-pin-wrapper.selected .map-result-pin {
-        transform: translateY(-1px) scale(1.08);
+        transform: none !important;
+        opacity: 1 !important;
     }
 
     /* Keep location popups completely inside the visible map. */
@@ -3216,6 +3216,42 @@ html {
             return 'Low Activity';
         }
 
+        let pendingMapMoveEndHandler = null;
+
+        function smoothlyFocusMarker(marker, openPopup = true) {
+            if (!marker) return;
+
+            // Cancel any unfinished movement and remove its queued popup action.
+            if (pendingMapMoveEndHandler) {
+                map.off('moveend', pendingMapMoveEndHandler);
+                pendingMapMoveEndHandler = null;
+            }
+            map.stop();
+
+            const target = marker.getLatLng();
+            const targetZoom = Math.max(map.getZoom(), 8);
+            const center = map.getCenter();
+            const alreadyCentered = center.distanceTo(target) < 2 && map.getZoom() === targetZoom;
+
+            const finishSelection = () => {
+                pendingMapMoveEndHandler = null;
+                if (openPopup) marker.openPopup();
+            };
+
+            if (alreadyCentered) {
+                window.requestAnimationFrame(finishSelection);
+                return;
+            }
+
+            pendingMapMoveEndHandler = finishSelection;
+            map.once('moveend', finishSelection);
+            map.flyTo(target, targetZoom, {
+                animate: true,
+                duration: 0.45,
+                easeLinearity: 0.25
+            });
+        }
+
         function setSelectedLocation(locationId, openPopup = true, scrollCardIntoView = true) {
             selectedLocationId = locationId;
 
@@ -3234,16 +3270,7 @@ html {
                 selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
 
-            const marker = markerIndex[locationId];
-            if (marker) {
-                const revealMarker = () => {
-                    map.panTo(marker.getLatLng(), { animate: true });
-                    if (openPopup) marker.openPopup();
-                };
-
-                map.setView(marker.getLatLng(), Math.max(map.getZoom(), 8), { animate: true });
-                window.setTimeout(revealMarker, 250);
-            }
+            smoothlyFocusMarker(markerIndex[locationId], openPopup);
         }
  
         function displayLocationsOnMap(locations) {
@@ -3314,28 +3341,26 @@ html {
                     maxWidth: 320,
                     maxHeight: popupMaxHeight,
                     className: 'haunted-popup',
-                    autoPan: true,
-                    keepInView: true,
-                    autoPanPaddingTopLeft: L.point(40, 70),
-                    autoPanPaddingBottomRight: L.point(40, 50)
+                    autoPan: false,
+                    keepInView: false
                 });
-
-
 
                 marker.on('click', () => {
-                    setSelectedLocation(location.id, false, true);
-                    marker.openPopup();
+                    // Move once, then open the popup after the map finishes.
+                    setSelectedLocation(location.id, true, true);
                 });
 
-                marker.on('popupopen', event => {
-                    setSelectedLocation(location.id, false, true);
-
-                    // Let Leaflet measure the completed popup, then pan it fully
-                    // inside the map with safe space around every edge.
-                    window.requestAnimationFrame(() => {
-                        const popup = event.popup;
-                        if (popup && typeof popup._adjustPan === 'function') {
-                            popup._adjustPan();
+                marker.on('popupopen', () => {
+                    // Keep the result card and marker selection synchronized
+                    // without triggering another map movement.
+                    selectedLocationId = location.id;
+                    document.querySelectorAll('.location-card').forEach(card => {
+                        card.classList.toggle('selected', card.dataset.id === location.id);
+                    });
+                    Object.values(markerIndex).forEach(indexedMarker => {
+                        const element = indexedMarker.getElement();
+                        if (element) {
+                            element.classList.toggle('selected', indexedMarker.locationId === location.id);
                         }
                     });
                 });
