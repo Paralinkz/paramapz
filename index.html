@@ -2389,6 +2389,39 @@ html {
         opacity: 1 !important;
     }
 
+
+    /* Map markers use the exact same red pin symbol as the results section. */
+    .map-result-pin-wrapper {
+        width: 18px !important;
+        height: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        filter: none !important;
+        overflow: visible !important;
+    }
+
+    .map-result-pin {
+        display: block !important;
+        width: 18px !important;
+        height: 24px !important;
+        font-size: 18px !important;
+        line-height: 24px !important;
+        text-align: center !important;
+        transform: translateY(-1px);
+        transform-origin: 50% 100%;
+        transition: transform .12s ease !important;
+        cursor: pointer !important;
+    }
+
+    .map-result-pin-wrapper:hover .map-result-pin,
+    .map-result-pin-wrapper:focus .map-result-pin,
+    .map-result-pin-wrapper.selected .map-result-pin {
+        transform: translateY(-1px) scale(1.08);
+    }
+
     /* Keep location popups completely inside the visible map. */
     .haunted-popup .leaflet-popup-content-wrapper {
         box-sizing: border-box;
@@ -3226,25 +3259,13 @@ html {
             locations.forEach(location => {
                 const normalizedActivity = normalizeActivityLevel(location.activityLevel);
 
-                const pinColor = normalizedActivity === 'high'
-                    ? '#ff4444'
-                    : normalizedActivity === 'moderate'
-                        ? '#ffaa44'
-                        : '#44ff44';
-
-                const activityPinSvg = encodeURIComponent(`
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="20" viewBox="0 0 14 20" aria-hidden="true">
-                        <path d="M7 19.5C5.9 17.6 1.5 12.4 1.5 7A5.5 5.5 0 0 1 12.5 7C12.5 12.4 8.1 17.6 7 19.5Z"
-                              fill="${pinColor}" stroke="#ffffff" stroke-width="1.15"/>
-                    </svg>
-                `);
-
-                const quietMarkerIcon = L.icon({
-                    iconUrl: `data:image/svg+xml;charset=UTF-8,${activityPinSvg}`,
-                    iconSize: [14, 20],
-                    iconAnchor: [7, 19],
-                    popupAnchor: [0, -18],
-                    className: `result-matched-pin activity-${normalizedActivity}`
+                // Use the exact same red location-pin symbol shown in the results section.
+                const quietMarkerIcon = L.divIcon({
+                    className: 'map-result-pin-wrapper',
+                    html: '<span class="map-result-pin" aria-hidden="true">📍</span>',
+                    iconSize: [18, 24],
+                    iconAnchor: [9, 23],
+                    popupAnchor: [0, -22]
                 });
 
                 const marker = L.marker(location.coordinates, {
