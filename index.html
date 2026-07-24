@@ -3473,6 +3473,46 @@ html {
                         permanent: false,
                         interactive: false
                     });
+
+                    // Keep the entire hover preview inside the visible map.
+                    // The map moves only when the preview crosses a safe edge.
+                    marker.on('tooltipopen', event => {
+                        window.requestAnimationFrame(() => {
+                            const tooltip = event.tooltip;
+                            const tooltipElement = tooltip?.getElement();
+                            const mapElement = map.getContainer();
+
+                            if (!tooltipElement || !mapElement || !map.hasLayer(tooltip)) return;
+
+                            const tooltipRect = tooltipElement.getBoundingClientRect();
+                            const mapRect = mapElement.getBoundingClientRect();
+                            const safePadding = 24;
+
+                            let panX = 0;
+                            let panY = 0;
+
+                            if (tooltipRect.left < mapRect.left + safePadding) {
+                                panX = tooltipRect.left - (mapRect.left + safePadding);
+                            } else if (tooltipRect.right > mapRect.right - safePadding) {
+                                panX = tooltipRect.right - (mapRect.right - safePadding);
+                            }
+
+                            if (tooltipRect.top < mapRect.top + safePadding) {
+                                panY = tooltipRect.top - (mapRect.top + safePadding);
+                            } else if (tooltipRect.bottom > mapRect.bottom - safePadding) {
+                                panY = tooltipRect.bottom - (mapRect.bottom - safePadding);
+                            }
+
+                            if (panX !== 0 || panY !== 0) {
+                                map.panBy([panX, panY], {
+                                    animate: true,
+                                    duration: 0.2,
+                                    easeLinearity: 0.35,
+                                    noMoveStart: true
+                                });
+                            }
+                        });
+                    });
                 }
 
                 marker.on('click', () => {
