@@ -260,7 +260,7 @@
     }
  
     /* Custom marker styles */
-    .ed-marker {
+    .legacy-ed-marker-disabled {
         background: radial-gradient(circle, #ff6b35, #cc4a1a);
         border: 2px solid #ff8c42;
         border-radius: 50%;
@@ -276,8 +276,8 @@
         transition: opacity 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
     }
         
-    .ed-marker:hover,
-    .ed-marker.selected {
+    .legacy-ed-marker-disabled:hover,
+    .legacy-ed-marker-disabled.selected {
         opacity: 1;
         transform: scale(1.1);
         box-shadow: 0 0 18px rgba(255, 107, 53, 0.85);
@@ -285,19 +285,19 @@
 
 
     /* Activity-based map marker glow */
-    .ed-marker.activity-low {
+    .legacy-ed-marker-disabled.activity-low {
         background: radial-gradient(circle, #44ff44, #1f8f1f);
         border-color: #44ff44;
         box-shadow: 0 0 14px rgba(68, 255, 68, 0.75);
     }
 
-    .ed-marker.activity-moderate {
+    .legacy-ed-marker-disabled.activity-moderate {
         background: radial-gradient(circle, #ffaa44, #b86518);
         border-color: #ffaa44;
         box-shadow: 0 0 16px rgba(255, 170, 68, 0.78);
     }
 
-    .ed-marker.activity-high {
+    .legacy-ed-marker-disabled.activity-high {
         background: radial-gradient(circle, #ff4444, #9f1f1f);
         border-color: #ff4444;
         box-shadow: 0 0 20px rgba(255, 68, 68, 0.90);
@@ -2238,7 +2238,7 @@ html {
        Individual neutral dots with no numbering, clustering,
        scaling, pulsing, or activity colors.
     ========================================================= */
-    .ed-marker {
+    .legacy-ed-marker-disabled {
         width: 14px !important;
         height: 14px !important;
         display: grid !important;
@@ -2254,7 +2254,7 @@ html {
         transition: opacity .15s ease !important;
     }
 
-    .ed-marker-core {
+    .legacy-ed-marker-disabled-core {
         width: 10px;
         height: 10px;
         display: block;
@@ -2268,14 +2268,14 @@ html {
                     box-shadow .15s ease !important;
     }
 
-    .ed-marker:hover {
+    .legacy-ed-marker-disabled:hover {
         opacity: 1;
         transform: none !important;
         box-shadow: none !important;
         z-index: 900 !important;
     }
 
-    .ed-marker:hover .ed-marker-core {
+    .legacy-ed-marker-disabled:hover .legacy-ed-marker-disabled-core {
         width: 10px;
         height: 10px;
         border: 2px solid #ffffff;
@@ -2284,14 +2284,14 @@ html {
         transform: none !important;
     }
 
-    .ed-marker.selected {
+    .legacy-ed-marker-disabled.selected {
         opacity: 1;
         transform: none !important;
         box-shadow: none !important;
         z-index: 1000 !important;
     }
 
-    .ed-marker.selected .ed-marker-core {
+    .legacy-ed-marker-disabled.selected .legacy-ed-marker-disabled-core {
         width: 10px;
         height: 10px;
         border: 2px solid #ffffff;
@@ -2301,9 +2301,9 @@ html {
     }
 
     /* Neutralize legacy activity-marker declarations. */
-    .ed-marker.activity-low,
-    .ed-marker.activity-moderate,
-    .ed-marker.activity-high {
+    .legacy-ed-marker-disabled.activity-low,
+    .legacy-ed-marker-disabled.activity-moderate,
+    .legacy-ed-marker-disabled.activity-high {
         background: transparent !important;
         border-color: transparent !important;
         box-shadow: none !important;
@@ -2312,8 +2312,8 @@ html {
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .ed-marker,
-        .ed-marker-core {
+        .legacy-ed-marker-disabled,
+        .legacy-ed-marker-disabled-core {
             transition: none !important;
             animation: none !important;
         }
@@ -2370,6 +2370,24 @@ html {
         stroke-width: 1.5 !important;
     }
 
+
+
+    /* Final marker implementation: the SVG itself supplies the red teardrop shape. */
+    .red-teardrop-marker {
+        width: 14px !important;
+        height: 20px !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        filter: none !important;
+        opacity: .92 !important;
+    }
+
+    .red-teardrop-marker:hover,
+    .red-teardrop-marker:focus {
+        opacity: 1 !important;
+    }
 
     /* Keep location popups completely inside the visible map. */
     .haunted-popup .leaflet-popup-content-wrapper {
@@ -3208,15 +3226,19 @@ html {
             locations.forEach(location => {
                 const normalizedActivity = normalizeActivityLevel(location.activityLevel);
 
-                const quietMarkerIcon = L.divIcon({
-                    className: 'quiet-map-marker',
-                    html: `
-                        <svg class="quiet-map-marker-pin" viewBox="0 0 14 20" aria-hidden="true" focusable="false">
-                            <path d="M7 19.5C5.9 17.6 1.5 12.4 1.5 7A5.5 5.5 0 0 1 12.5 7C12.5 12.4 8.1 17.6 7 19.5Z"></path>
-                        </svg>`,
+                const redPinSvg = encodeURIComponent(`
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="20" viewBox="0 0 14 20">
+                        <path d="M7 19.5C5.9 17.6 1.5 12.4 1.5 7A5.5 5.5 0 0 1 12.5 7C12.5 12.4 8.1 17.6 7 19.5Z"
+                              fill="#d92d20" stroke="#ffffff" stroke-width="1.15"/>
+                    </svg>
+                `);
+
+                const quietMarkerIcon = L.icon({
+                    iconUrl: `data:image/svg+xml;charset=UTF-8,${redPinSvg}`,
                     iconSize: [14, 20],
                     iconAnchor: [7, 19],
-                    popupAnchor: [0, -18]
+                    popupAnchor: [0, -18],
+                    className: 'red-teardrop-marker'
                 });
 
                 const marker = L.marker(location.coordinates, {
