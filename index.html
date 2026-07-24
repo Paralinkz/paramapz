@@ -2373,7 +2373,7 @@ html {
 
 
     /* Final marker implementation: the SVG itself supplies the red teardrop shape. */
-    .red-teardrop-marker {
+    .result-matched-pin {
         width: 14px !important;
         height: 20px !important;
         border: 0 !important;
@@ -2384,8 +2384,8 @@ html {
         opacity: .92 !important;
     }
 
-    .red-teardrop-marker:hover,
-    .red-teardrop-marker:focus {
+    .result-matched-pin:hover,
+    .result-matched-pin:focus {
         opacity: 1 !important;
     }
 
@@ -3226,19 +3226,25 @@ html {
             locations.forEach(location => {
                 const normalizedActivity = normalizeActivityLevel(location.activityLevel);
 
-                const redPinSvg = encodeURIComponent(`
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="20" viewBox="0 0 14 20">
+                const pinColor = normalizedActivity === 'high'
+                    ? '#ff4444'
+                    : normalizedActivity === 'moderate'
+                        ? '#ffaa44'
+                        : '#44ff44';
+
+                const activityPinSvg = encodeURIComponent(`
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="20" viewBox="0 0 14 20" aria-hidden="true">
                         <path d="M7 19.5C5.9 17.6 1.5 12.4 1.5 7A5.5 5.5 0 0 1 12.5 7C12.5 12.4 8.1 17.6 7 19.5Z"
-                              fill="#d92d20" stroke="#ffffff" stroke-width="1.15"/>
+                              fill="${pinColor}" stroke="#ffffff" stroke-width="1.15"/>
                     </svg>
                 `);
 
                 const quietMarkerIcon = L.icon({
-                    iconUrl: `data:image/svg+xml;charset=UTF-8,${redPinSvg}`,
+                    iconUrl: `data:image/svg+xml;charset=UTF-8,${activityPinSvg}`,
                     iconSize: [14, 20],
                     iconAnchor: [7, 19],
                     popupAnchor: [0, -18],
-                    className: 'red-teardrop-marker'
+                    className: `result-matched-pin activity-${normalizedActivity}`
                 });
 
                 const marker = L.marker(location.coordinates, {
