@@ -3458,11 +3458,10 @@ html {
                                  style="width: 100%; max-width: 280px; height: 180px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;"
                                  onerror="this.style.display='none'">
                         ` : ''}
-                        <p style="margin-bottom: 5px;"><strong>Location:</strong> ${escapeHtml(location.city)}, ${escapeHtml(location.state)}</p>
-                        <p style="margin-bottom: 5px;"><strong>Type:</strong> ${escapeHtml(location.type)}</p>
-                        <p style="margin-bottom: 5px;"><strong>Established:</strong> ${escapeHtml(String(location.yearEstablished || 'Unknown'))}</p>
-                        <p style="margin-bottom: 10px;"><strong>Activity Level:</strong> <span style="color: ${normalizedActivity === 'high' ? '#ff4444' : normalizedActivity === 'moderate' ? '#ffaa44' : '#44ff44'};">${escapeHtml(getActivityLabel(normalizedActivity))}</span></p>
-                        <div style="margin-bottom: 10px;">
+                        <p style="margin: 0 0 2px; line-height: 1.2;"><strong>Location:</strong> ${escapeHtml(location.city)}, ${escapeHtml(location.state)}</p>
+						<p style="margin: 0 0 2px; line-height: 1.2;"><strong>Type:</strong> ${escapeHtml(location.type)}</p>
+						<p style="margin: 0 0 2px; line-height: 1.2;"><strong>Established:</strong> ${escapeHtml(String(location.yearEstablished || 'Unknown'))}</p>
+						<p style="margin: 0 0 8px; line-height: 1.2;"><strong>Activity Level:</strong> <span style="color: ${normalizedActivity === 'high' ? '#ff4444' : normalizedActivity === 'moderate' ? '#ffaa44' : '#44ff44'};">${escapeHtml(getActivityLabel(normalizedActivity))}</span></p>
                             <strong>Story:</strong>
                             <p style="margin-top: 5px; line-height: 1.4; font-size: 0.9em;">${escapeHtml(location.story)}</p>
                         </div>
