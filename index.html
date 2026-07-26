@@ -2542,33 +2542,49 @@ html {
 
     /* =========================================================
        FINAL MAP SPACING ADJUSTMENTS
-       Tightens the space below the Squarespace navigation and
-       makes the scrollable search-results panel more compact.
+       These selectors also override Squarespace section padding.
     ========================================================= */
-    body .container {
-        padding-top: 8px !important;
+    body:has(.haunt-map-header) .page-section:has(.haunt-map-header),
+    body:has(.haunt-map-header) .page-section:has(.haunt-map-header) .content-wrapper,
+    body:has(.haunt-map-header) .page-section:has(.haunt-map-header) .content-width {
+        padding-top: 0 !important;
     }
 
-    .map-results-workspace .results-panel {
-        height: 440px !important;
-        min-height: 440px !important;
+    body .container {
+        margin-top: -46px !important;
+        padding-top: 0 !important;
+    }
+
+    .map-results-workspace .results-panel,
+    body .map-results-workspace .results-panel {
+        height: 340px !important;
+        min-height: 340px !important;
+        max-height: 340px !important;
     }
 
     @media (max-width: 820px) {
-        .map-results-workspace .results-panel {
-            height: 440px !important;
-            min-height: 440px !important;
+        body .container {
+            margin-top: -32px !important;
+        }
+
+        .map-results-workspace .results-panel,
+        body .map-results-workspace .results-panel {
+            height: 340px !important;
+            min-height: 340px !important;
+            max-height: 340px !important;
         }
     }
 
     @media (max-width: 540px) {
         body .container {
-            padding-top: 6px !important;
+            margin-top: -20px !important;
         }
 
-        .map-results-workspace .results-panel {
-            height: 400px !important;
-            min-height: 400px !important;
+        .map-results-workspace .results-panel,
+        body .map-results-workspace .results-panel {
+            height: 320px !important;
+            min-height: 320px !important;
+            max-height: 320px !important;
         }
     }
 
