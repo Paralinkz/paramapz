@@ -2540,6 +2540,38 @@ html {
         }
     }
 
+    /* =========================================================
+       FINAL MAP SPACING ADJUSTMENTS
+       Tightens the space below the Squarespace navigation and
+       makes the scrollable search-results panel more compact.
+    ========================================================= */
+    body .container {
+        padding-top: 8px !important;
+    }
+
+    .map-results-workspace .results-panel {
+        height: 440px !important;
+        min-height: 440px !important;
+    }
+
+    @media (max-width: 820px) {
+        .map-results-workspace .results-panel {
+            height: 440px !important;
+            min-height: 440px !important;
+        }
+    }
+
+    @media (max-width: 540px) {
+        body .container {
+            padding-top: 6px !important;
+        }
+
+        .map-results-workspace .results-panel {
+            height: 400px !important;
+            min-height: 400px !important;
+        }
+    }
+
 </style>
 </head>
 <body>
