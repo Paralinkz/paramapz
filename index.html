@@ -2540,6 +2540,65 @@ html {
         }
     }
 
+    /* =========================================================
+       FINAL MAP SPACING ADJUSTMENTS
+       These selectors also override Squarespace section padding.
+    ========================================================= */
+    body:has(.haunt-map-header) .page-section:has(.haunt-map-header),
+    body:has(.haunt-map-header) .page-section:has(.haunt-map-header) .content-wrapper,
+    body:has(.haunt-map-header) .page-section:has(.haunt-map-header) .content-width {
+        padding-top: 0 !important;
+    }
+
+    body .container {
+        margin-top: -46px !important;
+        padding-top: 0 !important;
+    }
+
+    /* Keep the outside results panel natural-sized. The scrolling
+       location-results list itself is the compact container. */
+    .map-results-workspace .results-panel,
+    body .map-results-workspace .results-panel {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+    }
+
+    .results-panel .locations-list,
+    body .results-panel .locations-list {
+        flex: 0 0 300px !important;
+        height: 300px !important;
+        min-height: 0 !important;
+        max-height: 300px !important;
+        overflow-y: auto !important;
+    }
+
+    @media (max-width: 820px) {
+        body .container {
+            margin-top: -32px !important;
+        }
+
+        .results-panel .locations-list,
+        body .results-panel .locations-list {
+            flex-basis: 300px !important;
+            height: 300px !important;
+            max-height: 300px !important;
+        }
+    }
+
+    @media (max-width: 540px) {
+        body .container {
+            margin-top: -20px !important;
+        }
+
+        .results-panel .locations-list,
+        body .results-panel .locations-list {
+            flex-basis: 260px !important;
+            height: 260px !important;
+            max-height: 260px !important;
+        }
+    }
+
 </style>
 </head>
 <body>
@@ -2852,21 +2911,14 @@ html {
     
     <script>
         const UNITED_STATES_CENTER = [38.5, -96.0];
-        const UNITED_STATES_ZOOM = 4;
-        // Responsive bounds for the contiguous United States. Leaflet calculates
-        // the correct opening zoom for the actual Squarespace map-container size.
-        const UNITED_STATES_BOUNDS = L.latLngBounds(
-            [24.25, -125.25], // southwest
-            [49.75, -66.25]   // northeast
-        );
-        const UNITED_STATES_EDGE_PADDING = [24, 24];
+        const UNITED_STATES_ZOOM = 4.75;
 
         let map = L.map('map', {
             center: UNITED_STATES_CENTER,
             zoom: UNITED_STATES_ZOOM,
             zoomSnap: 0.25,
             zoomDelta: 0.5,
-            minZoom: 3,
+            minZoom: 3.5,
             maxZoom: 18,
             worldCopyJump: false
         });
@@ -3284,28 +3336,9 @@ html {
         }
  
         function resetMapToUnitedStates() {
-            // Squarespace can finish sizing an embedded code block after Leaflet
-            // initializes. Recalculate the map size first, then fit the full U.S.
-            window.requestAnimationFrame(() => {
-                map.invalidateSize({ pan: false });
-                map.fitBounds(UNITED_STATES_BOUNDS, {
-                    paddingTopLeft: UNITED_STATES_EDGE_PADDING,
-                    paddingBottomRight: UNITED_STATES_EDGE_PADDING,
-                    animate: false
-                });
-            });
+            map.setView(UNITED_STATES_CENTER, UNITED_STATES_ZOOM, { animate: false });
+            window.setTimeout(() => map.invalidateSize(), 0);
         }
-
-        // Refit after the browser/Squarespace changes the available width.
-        let unitedStatesResizeTimer = null;
-        window.addEventListener('resize', () => {
-            window.clearTimeout(unitedStatesResizeTimer);
-            unitedStatesResizeTimer = window.setTimeout(() => {
-                if (!map._popup || !map._popup.isOpen()) {
-                    resetMapToUnitedStates();
-                }
-            }, 180);
-        });
 
         function centerMapOnLocations(locations) {
             if (locations.length === 0) {
