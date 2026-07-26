@@ -2852,14 +2852,21 @@ html {
     
     <script>
         const UNITED_STATES_CENTER = [38.5, -96.0];
-        const UNITED_STATES_ZOOM = 4.75;
+        const UNITED_STATES_ZOOM = 4;
+        // Responsive bounds for the contiguous United States. Leaflet calculates
+        // the correct opening zoom for the actual Squarespace map-container size.
+        const UNITED_STATES_BOUNDS = L.latLngBounds(
+            [24.25, -125.25], // southwest
+            [49.75, -66.25]   // northeast
+        );
+        const UNITED_STATES_EDGE_PADDING = [24, 24];
 
         let map = L.map('map', {
             center: UNITED_STATES_CENTER,
             zoom: UNITED_STATES_ZOOM,
             zoomSnap: 0.25,
             zoomDelta: 0.5,
-            minZoom: 3.5,
+            minZoom: 3,
             maxZoom: 18,
             worldCopyJump: false
         });
@@ -3277,9 +3284,28 @@ html {
         }
  
         function resetMapToUnitedStates() {
-            map.setView(UNITED_STATES_CENTER, UNITED_STATES_ZOOM, { animate: false });
-            window.setTimeout(() => map.invalidateSize(), 0);
+            // Squarespace can finish sizing an embedded code block after Leaflet
+            // initializes. Recalculate the map size first, then fit the full U.S.
+            window.requestAnimationFrame(() => {
+                map.invalidateSize({ pan: false });
+                map.fitBounds(UNITED_STATES_BOUNDS, {
+                    paddingTopLeft: UNITED_STATES_EDGE_PADDING,
+                    paddingBottomRight: UNITED_STATES_EDGE_PADDING,
+                    animate: false
+                });
+            });
         }
+
+        // Refit after the browser/Squarespace changes the available width.
+        let unitedStatesResizeTimer = null;
+        window.addEventListener('resize', () => {
+            window.clearTimeout(unitedStatesResizeTimer);
+            unitedStatesResizeTimer = window.setTimeout(() => {
+                if (!map._popup || !map._popup.isOpen()) {
+                    resetMapToUnitedStates();
+                }
+            }, 180);
+        });
 
         function centerMapOnLocations(locations) {
             if (locations.length === 0) {
